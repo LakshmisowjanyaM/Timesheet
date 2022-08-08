@@ -65,9 +65,8 @@ sap.ui.define([
 		var sServiceUrl = CommonModelManager.getServiceUrl();
 		if (_sPreviousServiceUrl !== sServiceUrl) {
 			_sPreviousServiceUrl = sServiceUrl;
-			_oModel = new ODataModel(CommonModelManager.getServiceUrl(), {
-				disableHeadRequestForToken: true,
-				useBatch: true
+			_oModel = new ODataModel(jQuery.sap.getModulePath("hcm.fab.mytimesheet")+CommonModelManager.getServiceUrl(), {
+				useBatch: false
 			});
 			_oErrorHandler = new ErrorHandler(_oModel, CommonModelManager.getI18NModel());
 			_oApplicationStates = {}; //Target system might have changed. Clear buffered data.

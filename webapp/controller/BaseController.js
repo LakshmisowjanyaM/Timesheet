@@ -6,6 +6,7 @@ sap.ui.define([
 ], function (Controller) {
 	"use strict";
 	var oDataModel = null;
+    var ocDataModel=null;
 	var oBundle = null;
 	var oPernr = null;
 	var oRouter = null;
@@ -17,6 +18,12 @@ sap.ui.define([
 		 */
 		getRouter: function () {
 			return sap.ui.core.UIComponent.getRouterFor(this);
+		},
+        initcoDataModel: function (oModel) {
+			ocDataModel = oModel;
+		},
+		getcoDataModel:function(oModel){
+			return ocDataModel;
 		},
 
 		/**

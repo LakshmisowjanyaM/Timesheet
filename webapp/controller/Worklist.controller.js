@@ -71,6 +71,7 @@ sap.ui.define([
 			this.oBundle = this.getResourceBundle();
 			this.oErrorHandler = this.getOwnerComponent()._oErrorHandler;
 			this.initoDataModel(this.oDataModel);
+            this.initcoDataModel(this.oCEModel);
 			this.initoBundle(this.oBundle);
 			this.initRouter(this.getRouter());
 			this.setModel(sap.ui.getCore().getMessageManager().getMessageModel(), "message");
