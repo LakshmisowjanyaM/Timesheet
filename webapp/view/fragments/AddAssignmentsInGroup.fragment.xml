@@ -1,0 +1,37 @@
+<!--
+
+    Copyright (C) 2009-2020 SAP SE or an SAP affiliate company. All rights reserved.
+
+-->
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:f="sap.ui.layout.form">
+	<!--<P13nDialog title="{i18n>Assignments}" showHeader="true" type="Standard" ok="handleConfirm" cancel="handleClose">-->
+	<!--	<content>-->
+	<TableSelectDialog noDataText="{i18n>assignmentNoData}" multiSelect="true" liveChange="handleSearch" confirm="handleOk" cancel="handleCancel" title="{i18n>assignmen}" items="{Assignments>/}">
+		<columns>
+			<Column mergeDuplicates="true" id="namePop" hAlign="Begin">
+				<Text text="{i18n>name}"/>
+			</Column>
+			<Column id="status1" minScreenWidth="Tablet" demandPopin="true">
+				<Text text="{i18n>status}"/>
+			</Column>
+			<Column id="validFromPop" minScreenWidth="Tablet" demandPopin="true">
+				<Text text="{i18n>validFrom}"/>
+			</Column>
+			<Column hAlign="Center" id="validToPop" minScreenWidth="Tablet" demandPopin="true">
+				<Text text="{i18n>validTo}"/>
+			</Column>
+		</columns>
+		<items>
+			<ColumnListItem>
+				<cells>
+					<Text text="{Assignments>AssignmentName}"/>
+					<Text text="{=${Assignments>AssignmentStatus} !== '0' ? ${i18n>activeStatus} : ${i18n>inactiveStatus}}"/>
+					<Text text="{path: 'Assignments>ValidityStartDate', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'dd MMM, yyyy' }}"/>
+					<Text text="{path: 'Assignments>ValidityEndDate', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'dd MMM, yyyy' }}"/>
+				</cells>
+			</ColumnListItem>
+		</items>
+	</TableSelectDialog>
+	<!--	</content>-->
+	<!--</P13nDialog>-->
+</core:FragmentDefinition>

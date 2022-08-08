@@ -1,0 +1,42 @@
+<!--
+
+    Copyright (C) 2009-2020 SAP SE or an SAP affiliate company. All rights reserved.
+
+-->
+<core:FragmentDefinition xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form" xmlns:core="sap.ui.core">
+	<VBox class="sapUiSmallMargin">
+		<f:Form id="EDITFORM_FIELDS" editable="true" formContainers="{path:'EditedTask>/containers/',templateShareable:false}">
+			<f:layout>
+				<!--<l:BlockBaseColumnLayout/>-->
+				<f:ResponsiveGridLayout/>
+			</f:layout>
+			<f:formContainers>
+				<f:FormContainer formElements="{path:'EditedTask>form/',templateShareable:false}">
+					<f:formElements>
+						<!--<core:CustomData key="FieldName" value="{ProfileFields>FieldName}"></core:CustomData>-->
+						<f:FormElement label="{EditedTask>FieldLabel}" visible="{= ${EditedTask>Switch} ? false : true}">
+							<f:fields>
+								<Input value="{EditedTask>FieldValue}"
+									maxLength="{parts:[{path:'EditedTask>FieldLength'},{path:'EditedTask>FieldType'}],formatter:'.formatter.fieldLength'}"
+									type="{path:'EditedTask>FieldType',formatter:'.formatter.typeKind'}" showValueHelp="{= ${EditedTask>hasF4} ? false : true}"
+									valueHelpOnly="{= ${EditedTask>hasF4} ? false : true}" valueHelpRequest="onValueHelp"
+									visible="{= ${EditedTask>FieldType} === 'C' || ${EditedTask>FieldType} === 'N' || ${EditedTask>FieldType} === 'P' ? true : false}">
+									<customData>
+										<core:CustomData key="FieldName" value="{EditedTask>FieldName}"></core:CustomData>
+									</customData>
+									<customData>
+										<core:CustomData key="AssignmentId" value="{EditedTask>AssignmentId}"></core:CustomData>
+									</customData>
+									<customData>
+										<core:CustomData key="FieldLabel" value="{EditedTask>FieldLabel}"></core:CustomData>
+									</customData>
+								</Input>
+								<DatePicker value="{EditedTask>FieldValue}" visible="{= ${EditedTask>FieldType} === 'D' ? true : false}"/>
+							</f:fields>
+						</f:FormElement>
+					</f:formElements>
+				</f:FormContainer>
+			</f:formContainers>
+		</f:Form>
+	</VBox>
+</core:FragmentDefinition>

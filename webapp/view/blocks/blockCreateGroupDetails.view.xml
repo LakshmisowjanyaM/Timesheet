@@ -1,0 +1,85 @@
+<!--
+
+    Copyright (C) 2009-2020 SAP SE or an SAP affiliate company. All rights reserved.
+
+-->
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:f="sap.ui.layout.form" xmlns:l="sap.ui.layout"
+	controllerName="hcm.fab.mytimesheet.controller.blockCommon" xmlns:dnd="sap.ui.core.dnd">
+	<!--<Table growing="true" selectionChange="onOverviewSelect" growingThreshold="50" mode="{controls>/onEdit}"-->
+	<!--	headerText="{i18n>timesheetRecords}"-->
+	<!--	items="{path:'TimeData>/', sorter: [{ path: 'HeaderData', descending:false, group: true},{ path: 'TimeEntryDataFields/WORKDATE', descending:false, group: true}],groupHeaderFactory: '.getGroupHeader'}"-->
+	<!--	delete="onDelete" enableBusyIndicator="true">-->
+	<!--	<headerToolbar>-->
+	<!--		<OverflowToolbar id="idOverflow">-->
+	<!--			<ToolbarSpacer/>-->
+	<!--			<Button id="addToGroup" text="{i18n>addToGroup}" tooltip="{i18n>addToGroup}" type="Transparent" press="onAddToGroup"-->
+	<!--				visible="{controls>/addToGroup}" enabled="{controls>/addToGroup}"/>-->
+	<!--		</OverflowToolbar>-->
+	<!--	</headerToolbar>-->
+	<!--	<columns>-->
+	<!--		<Column id="name" hAlign="Begin">-->
+	<!--			<Text text="{i18n>assign}"/>-->
+	<!--		</Column>-->
+	<!--		<Column id="validFrom" minScreenWidth="Tablet" demandPopin="true" hAlign="Begin">-->
+	<!--			<Text text="{i18n>hours}"/>-->
+	<!--		</Column>-->
+	<!--		<Column id="validTo" hAlign="Begin" visible="{=${controls>/clockTimeVisible} ? true:false}" minScreenWidth="Tablet" demandPopin="true">-->
+	<!--			<Text text="{i18n>startTime}"/>-->
+	<!--		</Column>-->
+	<!--		<Column id="editDelete" width="{= ${device>/system/phone} ? '' : '10%'}" hAlign="Begin">-->
+	<!--			<Text text="{i18n>editDelete}" visible="false"/>-->
+	<!--		</Column>-->
+	<!--	</columns>-->
+	<!--	<items>-->
+	<!--		<ColumnListItem type="Detail" highlight="Information">-->
+	<!--			<cells>-->
+	<!--				<Text text="{i18n>name}">-->
+	<!--					<Text text="{i18n>validFrom}">-->
+	<!--						<Text text="{i18n>validTo}">-->
+	<!--							<Button text="{i18n>addToGroup}"/>-->
+	<!--						</cells>-->
+	<!--					</ColumnListItem>-->
+	<!--				</items>-->
+	<!--			</Table>-->
+	<Table id="idCreateGroup" growing="true" width="100%" growingThreshold="50" mode="SingleSelectMaster"
+		items="{path:'createGroup>/Assignments', sorter: {path: 'Rank/', descending: false}}" enableBusyIndicator="true">
+		<headerToolbar>
+			<OverflowToolbar id="idTodo">
+				<ToolbarSpacer/>
+				<Button icon="sap-icon://navigation-up-arrow" visible="{= ${controls>/displayGroup} ? false : true}" tooltip="{i18n>moveUp}" press="moveUp"/>
+				<Button icon="sap-icon://navigation-down-arrow" visible="{= ${controls>/displayGroup} ? false : true}" tooltip="{i18n>moveDown}"
+					press="moveDown"/>
+				<Button id="addToGroup" text="{i18n>addToGroup}" tooltip="{i18n>addToGroup}" type="Transparent"
+					visible="{= ${controls>/displayGroup} ? false : true}" press="onAddToGroup"/>
+			</OverflowToolbar>
+		</headerToolbar>
+		<columns>
+			<Column mergeDuplicates="true" id="name" hAlign="Begin">
+				<Text text="{i18n>name}"/>
+			</Column>
+			<Column id="status" minScreenWidth="Tablet" demandPopin="true" hAlign="End">
+				<Text text="{i18n>status}"/>
+			</Column>
+			<Column id="validFrom" minScreenWidth="Tablet" demandPopin="true" hAlign="End">
+				<Text text="{i18n>validFrom}"/>
+			</Column>
+			<Column hAlign="End" id="validTo" minScreenWidth="Tablet" demandPopin="true">
+				<Text text="{i18n>validTo}"/>
+			</Column>
+			<Column id="remove" hAlign="End">
+				<Text text="{i18n>remove}" visible="false"/>
+			</Column>
+		</columns>
+		<items>
+			<ColumnListItem>
+				<cells>
+					<Text text="{createGroup>AssignmentName}"/>
+					<Text text="{path:'createGroup>Status',formatter:'.formatter.assignmentStatusGroup'}"/>
+					<Text text="{path: 'createGroup>ValidityStartDate', type: 'sap.ui.model.type.Date', formatOptions: { style:'full' }}"/>
+					<Text text="{path: 'createGroup>ValidityEndDate', type: 'sap.ui.model.type.Date', formatOptions: { style: 'full' }}"/>
+					<Button text="{i18n>remove}" press="onRemoveAssignment" visible="{= ${controls>/displayGroup} ? false : true}"/>
+				</cells>
+			</ColumnListItem>
+		</items>
+	</Table>
+</mvc:View>

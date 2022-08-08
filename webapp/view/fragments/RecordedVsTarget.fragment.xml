@@ -1,0 +1,24 @@
+<!--
+
+    Copyright (C) 2009-2020 SAP SE or an SAP affiliate company. All rights reserved.
+
+-->
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<ResponsivePopover title="{i18n>recordedItems}" class="sapUiPopupWithPadding">
+		<content>
+			<List id="RecordedVsTargetList" items="{RecordedVsTargetModel>/}" width="{= ${device>/system/phone} ? '100%' : '18rem' }">
+				<items>
+					<StandardListItem title="{RecordedVsTargetModel>AssignmentName}"
+						highlight="{path:'RecordedVsTargetModel>highlight',formatter:'.formatter.highlightListItem'}"
+						description="{parts:[{path:'RecordedVsTargetModel>TimeEntryDataFields/CATSAMOUNT'},{path: 'RecordedVsTargetModel>TimeEntryDataFields/UNIT'},{path:'RecordedVsTargetModel>TimeEntryDataFields/BEGUZ'},{path:'RecordedVsTargetModel>TimeEntryDataFields/ENDUZ'}], formatter: '.formatter.formatEntries'}"
+						type="{= ${RecordedVsTargetModel>enableRow} === false ? 'Inactive' : 'Navigation'}" press="onAssignmentQuickView">
+						<customData>
+							<core:CustomData key="counter" value="{RecordedVsTargetModel>Counter}"/>
+							<core:CustomData key="workdate" value="{RecordedVsTargetModel>TimeEntryDataFields/WORKDATE}"/>
+						</customData>
+					</StandardListItem>
+				</items>
+			</List>
+		</content>
+	</ResponsivePopover>
+</core:FragmentDefinition>

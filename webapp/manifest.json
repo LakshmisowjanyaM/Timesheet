@@ -1,0 +1,289 @@
+{
+    "_version": "1.40.0",
+    "sap.app": {
+        "id": "hcm.fab.mytimesheet",
+        "type": "application",
+        "i18n": "i18n/i18n.properties",
+        "applicationVersion": {
+            "version": "0.0.1"
+        },
+        "title": "{{appTitle}}",
+        "description": "{{appDescription}}",
+        "resources": "resources.json",
+        "sourceTemplate": {
+            "id": "@sap/generator-fiori:basic",
+            "version": "1.6.7",
+            "toolsId": "cbd0788d-de3e-4417-8da3-8dd3f0fc8558"
+        },
+		"dataSources": {
+			"mainService": {
+				"uri": "/sap/opu/odata/sap/HCMFAB_TIMESHEET_MAINT_SRV/",
+				"type": "OData",
+				"settings": {
+					"odataVersion": "2.0",
+					"localUri": "localService/metadata.xml"
+				}
+			},
+			"CEService": {
+				"uri": "/sap/opu/odata/sap/HCMFAB_COMMON_SRV/",
+				"type": "OData",
+				"settings": {
+					"odataVersion": "2.0",
+					"localUri": "localService/metadata.xml"
+				}}},
+        "crossNavigation": {
+            "inbounds": {
+                "hcm-fab-mytimesheet-inbound": {
+                    "signature": {
+                        "parameters": {},
+                        "additionalParameters": "allowed"
+                    },
+                    "semanticObject": "timesheet",
+                    "action": "manage",
+                    "title": "{{flpTitle}}",
+                    "subTitle": "{{flpSubtitle}}",
+                    "icon": ""
+                }
+            }
+        }
+    },
+    "sap.ui": {
+        "technology": "UI5",
+        "icons": {
+            "icon": "",
+            "favIcon": "",
+            "phone": "",
+            "phone@2": "",
+            "tablet": "",
+            "tablet@2": ""
+        },
+        "deviceTypes": {
+            "desktop": true,
+            "tablet": true,
+            "phone": true
+        }
+    },
+    "sap.ui5": {
+        "flexEnabled": true,
+        "dependencies": {
+            "minUI5Version": "1.102.1",
+            "libs": {
+                "sap.m": {},
+                "sap.ui.core": {},
+                "sap.f": {},
+                "sap.suite.ui.generic.template": {},
+                "sap.ui.comp": {},
+                "sap.ui.generic.app": {},
+                "sap.ui.table": {},
+                "sap.ushell": {}
+            }
+        },
+        "contentDensities": {
+            "compact": true,
+            "cozy": true
+        },
+        "models": {
+            "i18n": {
+                "type": "sap.ui.model.resource.ResourceModel",
+                "settings": {
+                    "bundleName": "hcm.fab.mytimesheet.i18n.i18n"
+                }
+            },
+            "": {
+				"dataSource": "mainService",
+				"preload": true
+			},
+			"ce": {
+				"dataSource": "CEService",
+				"preload": true
+			}
+        },
+        "resources": {
+            "css": [
+                {
+                    "uri": "css/style.css"
+                }
+            ]
+        },
+        "routing": {
+			"config": {
+				"routerClass": "sap.m.routing.Router",
+				"viewType": "XML",
+				"viewPath": "hcm.fab.mytimesheet.view",
+				"controlId": "app",
+				"controlAggregation": "pages",
+				"bypassed": {
+					"target": [
+						"notFound"
+					]
+				},
+				"async": true
+			},
+			"routes": [
+				{
+					"pattern": "",
+					"name": "worklist",
+					"target": [
+						"worklist"
+					]
+				},
+				{
+					"pattern": "CreateAssignment",
+					"name": "createAssignment",
+					"target": [
+						"createAssignment"
+					]
+				},
+				{
+					"pattern": "EditToDo",
+					"name": "editToDo",
+					"target": [
+						"editToDo"
+					]
+				},
+				{
+					"pattern": "EditAssignment",
+					"name": "editAssignment",
+					"target": [
+						"editAssignment"
+					]
+				},
+				{
+					"pattern": "CreateGroup",
+					"name": "createGroup",
+					"target": [
+						"createGroup"
+					]
+				}				
+			],
+			"targets": {
+				"worklist": {
+					"viewName": "Worklist",
+					"viewId": "worklist",
+					"viewLevel": 1,
+					"title": "{i18n>worklistViewTitle}",
+					"routerClass": "sap.m.routing.Router",
+					"viewType": "XML",
+					"viewPath": "hcm.fab.mytimesheet.view",
+					"controlId": "app",
+					"controlAggregation": "pages",
+					"bypassed": {
+						"target": [
+							"notFound"
+						]
+					},
+					"async": true
+				},
+				"createAssignment": {
+					"viewName": "Object",
+					"viewId": "object",
+					"viewLevel": 2,
+					"title": "{i18n>objectViewTitle}",
+					"routerClass": "sap.m.routing.Router",
+					"viewType": "XML",
+					"viewPath": "hcm.fab.mytimesheet.view",
+					"controlId": "app",
+					"controlAggregation": "pages",
+					"bypassed": {
+						"target": [
+							"notFound"
+						]
+					},
+					"async": true
+				},
+				"editAssignment": {
+					"viewName": "EditAssignment",
+					"viewId": "editAssignment",
+					"viewLevel": 2,
+					"title": "{i18n>objectViewTitle}",
+					"routerClass": "sap.m.routing.Router",
+					"viewType": "XML",
+					"viewPath": "hcm.fab.mytimesheet.view",
+					"controlId": "app",
+					"controlAggregation": "pages",
+					"bypassed": {
+						"target": [
+							"notFound"
+						]
+					},
+					"async": true
+				},
+				"editToDo": {
+					"viewName": "EditToDoMobile",
+					"viewId": "editToDo",
+					"viewLevel": 2,
+					"title": "{i18n>objectViewTitle}",
+					"routerClass": "sap.m.routing.Router",
+					"viewType": "XML",
+					"viewPath": "hcm.fab.mytimesheet.view",
+					"controlId": "app",
+					"controlAggregation": "pages",
+					"bypassed": {
+						"target": [
+							"notFound"
+						]
+					},
+					"async": true
+				},
+				"objectNotFound": {
+					"viewName": "ObjectNotFound",
+					"viewId": "objectNotFound",
+					"routerClass": "sap.m.routing.Router",
+					"viewType": "XML",
+					"viewPath": "hcm.fab.mytimesheet.view",
+					"controlId": "app",
+					"controlAggregation": "pages",
+					"bypassed": {
+						"target": [
+							"notFound"
+						]
+					},
+					"async": true
+				},
+				"notFound": {
+					"viewName": "NotFound",
+					"viewId": "notFound",
+					"routerClass": "sap.m.routing.Router",
+					"viewType": "XML",
+					"viewPath": "hcm.fab.mytimesheet.view",
+					"controlId": "app",
+					"controlAggregation": "pages",
+					"bypassed": {
+						"target": [
+							"notFound"
+						]
+					},
+					"async": true
+				},
+				"blockCommon": {
+					"viewType": "XML",
+					"viewName": "blockCommon",
+					"routerClass": "sap.m.routing.Router",
+					"viewPath": "hcm.fab.mytimesheet.view",
+					"controlId": "app",
+					"controlAggregation": "pages",
+					"bypassed": {
+						"target": [
+							"notFound"
+						]
+					},
+					"async": true
+				},
+				"createGroup": {
+					"viewType": "XML",
+					"viewName": "createGroup"
+				}
+			}
+		},
+        "rootView": {
+            "viewName": "hcm.fab.mytimesheet.view.App",
+            "type": "XML",
+            "async": true,
+            "id": "App"
+        }
+    },
+    "sap.cloud": {
+        "public": true,
+        "service": "hcm-fab-mytimesheet"
+    }
+}

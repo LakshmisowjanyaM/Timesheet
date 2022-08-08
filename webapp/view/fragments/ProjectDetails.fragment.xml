@@ -1,0 +1,39 @@
+<!--
+
+    Copyright (C) 2009-2020 SAP SE or an SAP affiliate company. All rights reserved.
+
+-->
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:f="sap.ui.layout.form">
+	<Dialog title="{i18n>projectDetails}" showHeader="true" type="Standard" beforeOpen="handleBeforeOpen">
+		<content>
+			<VBox class="sapUiSmallMargin">
+				<f:SimpleForm editable="false" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12"
+					adjustLabelSpan="false" emptySpanXL="4" emptySpanL="4" emptySpanM="4" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1"
+					singleContainerFullSize="true">
+					<f:content>
+						<Label text="{i18n>project}"/>
+						<Text text="{ProjectDetails>/ProjectGuidExt}"/>
+						<Label text="{i18n>subProject}"/>
+						<Text text="{ProjectDetails>/ProjectObjGuidExt}"/>
+						<Label text="{i18n>actualStart}"/>
+						<DatePicker dateValue="{ProjectDetails>/ActualStart}"/>
+						<Label text="{i18n>actualFinish}"/>
+						<DatePicker dateValue="{ProjectDetails>/ActualFinish}"/>
+						<Label text="{i18n>plannedWork}"/>
+						<Input value="{ProjectDetails>/PlannedWork}"/>
+						<Label text="{i18n>remainingWork}"/>
+						<Input value="{ProjectDetails>/RemainingWork}"/>
+						<Label text="{i18n>comments}"/>
+						<TextArea value="{ProjectDetails>/Comments}"/>
+					</f:content>
+				</f:SimpleForm>
+			</VBox>
+		</content>
+		<beginButton>
+			<Button text="{i18n>submit}" tooltip="{i18n>submit}" type="Emphasized" press="handleConfirm"/>
+		</beginButton>
+		<endButton>
+			<Button text="{i18n>cancel}" tooltip="{i18n>cancel}" press="handleClose"/>
+		</endButton>
+	</Dialog>
+</core:FragmentDefinition>

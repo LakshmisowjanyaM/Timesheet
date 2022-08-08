@@ -1,0 +1,20 @@
+<!--
+
+    Copyright (C) 2009-2020 SAP SE or an SAP affiliate company. All rights reserved.
+
+-->
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form"
+	xmlns:u="sap.ui.unified" class="sapUiSizeCompact">
+	<Dialog title="{i18n>copyFromTarget}" contentWidth="10%" contentHeight="25%" showHeader="true">
+		<l:VerticalLayout>
+			<Label text="{i18n>selectAssignment}" class="sapUiLargeMarginBeginEnd sapUiLargeMarginTop"/>
+			<ComboBox id="copyFromTarget" selectedKey="" selectionChange="onCopySelectionChange" items="{ path: 'TasksWithGroups>/'}"
+				class="sapUiLargeMarginBegin sapUiTinyMarginTop">
+				<core:Item key="{TasksWithGroups>AssignmentId}" text="{TasksWithGroups>AssignmentName}"
+					enabled="{ parts: [{ path: 'TasksWithGroups>AssignmentStatus'}, { path: 'TasksWithGroups>ValidityStartDate' }, { path: 'TasksWithGroups>ValidityEndDate' }, { path: 'TimeData>TimeEntryDataFields' },{path:'TasksWithGroups>AssignmentType'}],formatter:'.activeCopyTasks'}"/>
+			</ComboBox>
+		</l:VerticalLayout>
+		<beginButton><Button text="{i18n>copy}" enabled="{controls>/targetCopyButtonEnabled}" press="handleCopy"/></beginButton>
+		<endButton><Button text="{i18n>cancel}" press="handleCancel"/></endButton>
+	</Dialog>
+</core:FragmentDefinition>

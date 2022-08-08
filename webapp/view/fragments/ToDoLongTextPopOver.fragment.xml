@@ -1,0 +1,15 @@
+<!--
+
+    Copyright (C) 2009-2020 SAP SE or an SAP affiliate company. All rights reserved.
+
+-->
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout" class="sapUiSizeCompact">
+	<QuickView >
+		<QuickViewPage header="{i18n>comments}">
+			<QuickViewGroup>
+				<QuickViewGroupElement
+					value="{parts:[{path:'TodoList>TimeEntryDataFields/LONGTEXT_DATA'},{path:'TodoList>RejReasondesc'}],formatter:'.commentDisplay'}"></QuickViewGroupElement>
+			</QuickViewGroup>
+		</QuickViewPage>
+	</QuickView>
+</core:FragmentDefinition>

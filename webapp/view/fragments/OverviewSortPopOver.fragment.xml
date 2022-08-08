@@ -1,0 +1,15 @@
+<!--
+
+    Copyright (C) 2009-2020 SAP SE or an SAP affiliate company. All rights reserved.
+
+-->
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<ViewSettingsDialog confirm="handleOverviewSortingConfirm">
+		<sortItems>
+			<ViewSettingsItem text="{i18n>noselection}" key="NoSelection" selected="true"/>
+			<ViewSettingsItem text="{i18n>assign}" key="Assignment"/>
+			<ViewSettingsItem text="{i18n>startTime}" key="StartTime"/>
+			<ViewSettingsItem text="{i18n>endTime}" key="EndTime"/>
+		</sortItems>
+	</ViewSettingsDialog>
+</core:FragmentDefinition>

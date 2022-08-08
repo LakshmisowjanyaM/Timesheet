@@ -1,0 +1,648 @@
+<!--
+
+    Copyright (C) 2009-2020 SAP SE or an SAP affiliate company. All rights reserved.
+
+-->
+<mvc:View controllerName="hcm.fab.mytimesheet.controller.Worklist" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" xmlns:semantic="sap.m.semantic"
+	xmlns:footerbar="sap.ushell.ui.footerbar" xmlns:l="sap.ui.layout" xmlns:u="sap.ui.unified" xmlns:smartFilterBar="sap.ui.comp.smartfilterbar"
+	xmlns:smartTable="sap.ui.comp.smarttable" xmlns:core="sap.ui.core" xmlns:uxap="sap.uxap" xmlns:common="hcm.fab.mytimesheet.controls"
+	xmlns:sf="sap.f">
+	<uxap:ObjectPageLayout id="ObjectPageLayout" enableLazyLoading="true" navigate="iconTabSelection" useIconTabBar="true"
+		showAnchorBarPopover="false" upperCaseAnchorBar="false" showFooter="{controls>/showFooter}" subSectionLayout="TitleOnTop">
+		<uxap:headerTitle>
+			<uxap:ObjectPageDynamicHeaderTitle id="mainPageHeaderTitle" headerContentPinnable="true" preserveHeaderStateOnScroll="true">
+				<uxap:expandedHeading>
+					<Title id="expandedHeaderTitle" text="{libCommon>/EmployeeName/FormattedName}" wrapping="true"/>
+				</uxap:expandedHeading>
+				<uxap:snappedHeading>
+					<FlexBox fitContainer="true" alignItems="Center">
+						<Title text="{libCommon>/EmployeeName/FormattedName}" wrapping="true"/>
+					</FlexBox>
+				</uxap:snappedHeading>
+				<uxap:expandedContent>
+					<Text class="sapUiSmallMarginBottom"
+						text="{parts:['i18n>subTitle','i18n>subTitleWithoutPernr','libCommon>/EmployeePositionLongtext','libCommon>/EmployeePositionId','libCommon>/EmployeeNumber','controls>/showEmployeeNumber','controls>/showEmployeeNumberWithoutZeros'],formatter: '.formatter.formatObjectPageTitle'}"/>
+					<FlexBox wrap="Wrap">
+						<l:VerticalLayout id="mProgressLayout" visible="{= ${device>/system/phone} ? true : false}">
+							<Label text="{i18n>weeklyMessageText}" class="sapUiLargeMarginLeft"
+								visible="{parts:[{path:'controls>/duplicateScreen'},{path:'controls>/totalTarget'}],formatter:'.formatter.progressVisible'}"></Label>
+							<List width="18rem" backgroundDesign="Transparent" itemPress="handleFocusLinkClick"
+								visible="{parts:[{path:'controls>/duplicateScreen'},{path:'controls>/totalTarget'}],formatter:'.formatter.progressVisible'}"
+								tooltip="{parts:[{path:'TotalHours>/TotalHours'},{path:'TotalHours>/TargetHours'}],formatter:'.formatter.getHoursText'}">
+								<items>
+									<CustomListItem type="Active">
+										<content>
+											<ProgressIndicator id="mProgressIndicator" class="sapUiSmallMarginBottom"
+												percentValue="{parts:[{path:'TotalHours>/TotalHours'},{path:'TotalHours>/TargetHours'}],formatter:'.formatter.getPercentHours'}"
+												displayValue="{parts:[{path:'TotalHours>/TotalHours'},{path:'TotalHours>/TargetHours'}],formatter:'.formatter.getHoursText'}"
+												showValue="true" width="100%"
+												tooltip="{parts:[{path:'TotalHours>/TotalHours'},{path:'TotalHours>/TargetHours'}],formatter:'.formatter.getHoursText'}"
+												state="{parts:[{path:'TotalHours>/TotalHours'},{path:'TotalHours>/TargetHours'}],formatter:'.formatter.getStateText'}"/>
+										</content>
+									</CustomListItem>
+								</items>
+							</List>
+						</l:VerticalLayout>
+					</FlexBox>
+					<core:ExtensionPoint name="worklistPageHeaderExtension"/>
+				</uxap:expandedContent>
+				<uxap:snappedContent>
+					<FlexBox wrap="Wrap">
+						<l:VerticalLayout id="mSnappedProgressLayout" visible="{= ${device>/system/phone} ? true : false}">
+							<Label text="{i18n>weeklyMessageText}" class="sapUiLargeMarginLeft"
+								visible="{parts:[{path:'controls>/duplicateScreen'},{path:'controls>/totalTarget'}],formatter:'.formatter.progressVisible'}"></Label>
+							<List width="18rem" backgroundDesign="Transparent" itemPress="handleFocusLinkClick"
+								visible="{parts:[{path:'controls>/duplicateScreen'},{path:'controls>/totalTarget'}],formatter:'.formatter.progressVisible'}"
+								tooltip="{parts:[{path:'TotalHours>/TotalHours'},{path:'TotalHours>/TargetHours'}],formatter:'.formatter.getHoursText'}">
+								<items>
+									<CustomListItem type="Active">
+										<content>
+											<ProgressIndicator id="mSnappedProgressIndicator" class="sapUiSmallMarginBottom"
+												percentValue="{parts:[{path:'TotalHours>/TotalHours'},{path:'TotalHours>/TargetHours'}],formatter:'.formatter.getPercentHours'}"
+												displayValue="{parts:[{path:'TotalHours>/TotalHours'},{path:'TotalHours>/TargetHours'}],formatter:'.formatter.getHoursText'}"
+												showValue="true" width="100%"
+												tooltip="{parts:[{path:'TotalHours>/TotalHours'},{path:'TotalHours>/TargetHours'}],formatter:'.formatter.getHoursText'}"
+												state="{parts:[{path:'TotalHours>/TotalHours'},{path:'TotalHours>/TargetHours'}],formatter:'.formatter.getStateText'}"/>
+										</content>
+									</CustomListItem>
+								</items>
+							</List>
+						</l:VerticalLayout>
+					</FlexBox>
+				</uxap:snappedContent>
+				<uxap:actions>
+					<!--<uxap:ObjectPageHeaderActionButton hideText="false" importance="Low"/>-->
+					<Link id="hiddenFocusElement"/>
+					<common:OnBehalfIndicator id="overviewOnBehalfIndicator" applicationId="MYTIMESHEET"/>
+					<common:ConcurrentEmploymentObjectPageHeaderActionButton id="toolBtnCE" hideText="false" hideIcon="true"
+						assignmentChange="onAssignmentSwitch" applicationId="MYTIMESHEET"/>
+					<Button id="switchProfileButton" text="{i18n>switchProfile}" tooltip="{i18n>switchProfile}" type="Transparent" press="onSwitchProfile"
+						visible="false"/>
+					<common:OnBehalfObjectPageHeaderActionButton id="toolBtnOB" assignmentChange="onAssignmentSwitch" applicationId="MYTIMESHEET"/>
+					<!--Allow adding actions to the worklist object page layout -->
+					<core:ExtensionPoint name="worklistPageActionsExtension"/>
+				</uxap:actions>
+			</uxap:ObjectPageDynamicHeaderTitle>
+		</uxap:headerTitle>
+		<uxap:sections>
+			<uxap:ObjectPageSection selectedSubSection="true" id="overview" title="{i18n>overview}">
+				<uxap:subSections>
+					<uxap:ObjectPageSubSection title="{i18n>overview}">
+						<uxap:blocks>
+							<VBox class="sapUiMarginTiny">
+								<MessageStrip id="InitialOverviewMessageStrip" visible="{controls>/showInformationMessage}" text="{i18n>overviewMessageStrip}"
+									showCloseButton="true" type="Information" showIcon="true" class="sapUiMediumMarginBottom">
+									<link><Link text="{i18n>clickHere}" press="navigateToTasks"/></link>
+								</MessageStrip>
+								<MessageStrip id="OverviewMessageStrip" visible="{controls>/showInformationMessageWithRange}" showCloseButton="true" type="Information"
+									showIcon="true" class="sapUiMediumMarginBottom"></MessageStrip>
+								<l:DynamicSideContent id="DynamicSideContent" class="sapUiDSCExplored sapUiResponsiveContentPadding" sideContentVisibility="AlwaysShow"
+									sideContentFallDown="BelowXL" sideContentPosition="Begin" containerQuery="true">
+									<l:sideContent class="sapUiResponsiveMargin" width="30%">
+										<l:VerticalLayout visible="{= ${device>/system/phone} ? false : true}">
+											<Label text="{i18n>weeklyMessageText}" class="sapUiLargeMarginLeft"
+												visible="{parts:[{path:'controls>/duplicateScreen'},{path:'controls>/totalTarget'},{path:'controls>/fixProgressIndicator'}],formatter:'.formatter.progressVisible'}"></Label>
+											<List backgroundDesign="Transparent" itemPress="handleFocusLinkClick"
+												visible="{parts:[{path:'controls>/duplicateScreen'},{path:'controls>/totalTarget'},{path:'controls>/fixProgressIndicator'}],formatter:'.formatter.progressVisible'}"
+												tooltip="{parts:[{path:'TotalHours>/TotalHours'},{path:'TotalHours>/TargetHours'}],formatter:'.formatter.getHoursText'}">
+												<items>
+													<CustomListItem type="Active">
+														<content>
+															<ProgressIndicator id="progressIndicator" class="sapUiSmallMarginBottom"
+																percentValue="{parts:[{path:'TotalHours>/TotalHours'},{path:'TotalHours>/TargetHours'}],formatter:'.formatter.getPercentHours'}"
+																displayValue="{parts:[{path:'TotalHours>/TotalHours'},{path:'TotalHours>/TargetHours'}],formatter:'.formatter.getHoursText'}"
+																showValue="true" width="100%"
+																tooltip="{parts:[{path:'TotalHours>/TotalHours'},{path:'TotalHours>/TargetHours'}],formatter:'.formatter.getHoursText'}"
+																state="{parts:[{path:'TotalHours>/TotalHours'},{path:'TotalHours>/TargetHours'}],formatter:'.formatter.getStateText'}"/>
+														</content>
+													</CustomListItem>
+												</items>
+											</List>
+											<u:Calendar id="idCalendar" intervalSelection="{controls>/intervalSelection}" singleSelection="{controls>/singleSelection}" months="2"
+												visible="{= ${device>/system/phone} ? false : true}" select="handleCalendarSelect" minDate="{TimeEntries>/0/CaleNavMinDate}"
+												maxDate="{TimeEntries>/0/CaleNavMaxDate}" firstDayOfWeek="{path:'TimeEntries>/0/FirstDayOfWeek',formatter:'.formatter.dayOfWeek'}"
+												startDateChange="onStartDateChange"/>
+											<u:CalendarLegend id="legend" visible="{= ${device>/system/phone} ? false : true}">
+												<u:items>
+													<u:CalendarLegendItem text="{i18n>timeCompleted}" type="Type08"/>
+													<u:CalendarLegendItem text="{i18n>timeMissing}" type="Type01"/>
+													<u:CalendarLegendItem text="{i18n>timeRejected}" type="Type03"/>
+													<u:CalendarLegendItem text="{i18n>SentForApproval}" type="Type07"/>
+													<!--Allow adding further items to the calendar legend -->
+													<core:ExtensionPoint name="overviewCalendarLegendExtension"/>
+												</u:items>
+											</u:CalendarLegend>
+											<!--<u:CalendarDateInterval days="14" select="handleCalendarSelect" visible="{= ${device>/system/phone} ? true :false}"/>-->
+										</l:VerticalLayout>
+										<l:VerticalLayout width="100%" visible="{= ${device>/system/phone} ? true : false}">
+											<u:CalendarDateInterval showWeekNumbers="false" id="mCalendar" singleSelection="{controls>/singleSelection}"
+												minDate="{path:'TimeEntries>/0/CaleNavMinDate',formatter:'.formatter.getUTCDate'}"
+												maxDate="{path:'TimeEntries>/0/CaleNavMaxDate',formatter:'.formatter.getUTCDate'}" startDateChange="onStartDateChange"
+												select="handleCalendarSelect" width="100%" visible="{= ${device>/system/phone} ? true :false}"/>
+											<ToggleButton class="sapUiNoContentPadding sapUiNoMarginTop sapUiNoMarginBottom" width="100%" type="Transparent"
+												icon="sap-icon://navigation-down-arrow" press="hideLegend"></ToggleButton>
+											<u:CalendarLegend id="mlegend" visible="false">
+												<u:items>
+													<u:CalendarLegendItem text="{i18n>timeCompleted}" type="Type08"/>
+													<u:CalendarLegendItem text="{i18n>timeMissing}" type="Type01"/>
+													<u:CalendarLegendItem text="{i18n>timeRejected}" type="Type03"/>
+													<u:CalendarLegendItem text="{i18n>SentForApproval}" type="Type07"/>
+													<!--Allow adding further items to the calendar legend -->
+													<core:ExtensionPoint name="overviewCalendarLegendExtension"/>
+												</u:items>
+											</u:CalendarLegend>
+										</l:VerticalLayout>
+									</l:sideContent>
+									<l:mainContent width="70%">
+										<VBox id="overviewLayout"
+											visible="{parts:[{path:'controls>/currentAdHoc'},{path:'controls>/isFormEntryEnabled'}],formatter:'.formatter.getAdHocVisible'}">
+											<core:Fragment fragmentName="hcm.fab.mytimesheet.view.fragments.adHocFragment" type="XML"/>
+										</VBox>
+										<l:HorizontalLayout>
+											<Table visible="{= ${controls>/currentAdHoc} ? false : true}" sticky="HeaderToolbar,InfoToolbar,ColumnHeaders" id="idOverviewTable"
+												growing="true" noDataText="{i18n>noTimeEntries}" selectionChange="onOverviewSelect" growingThreshold="50" mode="{controls>/onEdit}"
+												headerText="{i18n>timesheetRecords}"
+												items="{path:'TimeData>/', sorter: [{ path: 'HeaderData', descending:false, group: true},{ path: 'TimeEntryDataFields/WORKDATE', descending:false, group: true}],groupHeaderFactory: '.getGroupHeader'}"
+												delete="onDelete" enableBusyIndicator="true">
+												<headerToolbar>
+													<OverflowToolbar id="idOverflow">
+														<!--<Title id="idDateHeader" text="" level="H2"/>-->
+														<ComboBox visible="false" id="filterCombo" items="{ path: 'Status>/', sorter: { path: 'text' } }" width="10%"
+															selectionChange="onStatusChange" selectedKey="100">
+															<core:Item key="{Status>key}" text="{path:'Status>key', formatter: '.formatter.status'}"/>
+														</ComboBox>
+														<Label text="{i18n>weeklyMessageText}" class="sapUiLargeMarginLeft"
+															visible="{parts:[{path:'controls>/duplicateScreen'},{path:'controls>/totalTarget'},{path:'controls>/fixProgressIndicator'},{path:'device>/system/phone'}],formatter:'.formatter.progressFixedVisible'}"></Label>
+														<List backgroundDesign="Transparent" width="30%" itemPress="handleFocusLinkClick"
+															visible="{parts:[{path:'controls>/duplicateScreen'},{path:'controls>/totalTarget'},{path:'controls>/fixProgressIndicator'},{path:'device>/system/phone' }],formatter:'.formatter.progressFixedVisible'}"
+															tooltip="{parts:[{path:'TotalHours>/TotalHours'},{path:'TotalHours>/TargetHours'}],formatter:'.formatter.getHoursText'}">
+															<items>
+																<CustomListItem type="Active">
+																	<content>
+																		<ProgressIndicator id="progressIndicatorFixed"
+																			percentValue="{parts:[{path:'TotalHours>/TotalHours'},{path:'TotalHours>/TargetHours'}],formatter:'.formatter.getPercentHours'}"
+																			displayValue="{parts:[{path:'TotalHours>/TotalHours'},{path:'TotalHours>/TargetHours'}],formatter:'.formatter.getHoursText'}"
+																			showValue="true" width="100%"
+																			tooltip="{parts:[{path:'TotalHours>/TotalHours'},{path:'TotalHours>/TargetHours'}],formatter:'.formatter.getHoursText'}"
+																			state="{parts:[{path:'TotalHours>/TotalHours'},{path:'TotalHours>/TargetHours'}],formatter:'.formatter.getStateText'}"/>
+																	</content>
+																</CustomListItem>
+															</items>
+														</List>
+														<ObjectIdentifier id="missingHours"
+															text="{parts:[{path:'TimeData>/0/target'},{path:'TimeData>/0/totalHours'}], formatter:'.formatter.mobconcatStrings'}"
+															visible="{= ${device>/system/phone} ? true : false}"/>
+														<ToolbarSpacer/>
+														<Button id="copyTargetHours" text="{i18n>copyFromTarget}" tooltip="{i18n>copyFromTarget}" type="Transparent" press="onCopyTarget"
+															visible="{controls>/duplicateVisibility}"
+															enabled="{parts:[{path:'controls>/duplicateVisibility'},{path:'controls>/duplicateScreen'}],formatter:'.formatter.duplicateData'}"/>
+														<Button id="duplicateSaveButton" text="{i18n>duplicateTimeEntry}" tooltip="{i18n>duplicateTimeEntry}" type="Transparent"
+															press="onDuplicateTask" visible="{controls>/duplicateVisibility}"
+															enabled="{parts:[{path:'controls>/duplicateVisibility'},{path:'controls>/duplicateScreen'}],formatter:'.formatter.duplicateData'}"/>
+														<Button id="duplicateWeekButton" text="{i18n>duplicateWeek}" tooltip="{i18n>duplicateWeek}" type="Transparent" press="onDuplicateWeek"
+															visible="{controls>/duplicateWeekVisibility}"
+															enabled="{parts:[{path:'controls>/duplicateWeekEnable'},{path:'controls>/duplicateScreen'}],formatter:'.formatter.duplicateData'}"/>
+														<Button id="editButton" text="{i18n>enterRecords}" tooltip="{i18n>enterRecords}" press="onCheckLocking"
+															visible="{= ${device>/system/phone} ? false : ${controls>/overviewEdit}}" enabled="{controls>/overviewEditEnabled}"/>
+														<Button icon="sap-icon://sort" press="handleOverviewSortingButtonPressed" visible="{= ${controls>/duplicateVisibility} ? false : true}"/>
+														<Button icon="sap-icon://filter" press="handleOverviewFilterButtonPressed"
+															visible="{parts:[{path:'controls>/duplicateVisibility'},{path:'device>/system/phone'}],formatter:'.formatter.isFilterVisible'}"/>
+														<Button icon="sap-icon://action-settings" press="onPersButtonPressed" enabled="{controls>/overviewEditEnabled}"/>
+														<!--Allows to add buttons to the overview table toolbar -->
+														<core:ExtensionPoint name="overviewTableToolbarExtension"/>
+													</OverflowToolbar>
+												</headerToolbar>
+												<columns>
+													<!--<Column width="24%" mergeDuplicates="true" id="date" visible="false">-->
+													<!--	<Text text="{i18n>date}"/>-->
+													<!--</Column>-->
+													<Column width="{= ${device>/system/phone} ? '' : '12%'}" mergeDuplicates="true" id="entered" minScreenWidth="Desktop"
+														popinDisplay="{= ${controls>/duplicateVisibility} ? 'Block' : 'Inline'}" demandPopin="true"
+														visible="{= ${device>/system/phone} ? false : true}">
+														<Text text="{parts:['i18n>record','i18n>recorded','i18n>target'],formatter: 'jQuery.sap.formatMessage'}"/>
+													</Column>
+													<Column width="{= ${device>/system/phone} ? '70%' : '20%'}" id="assignment" hAlign="Begin">
+														<Text text="{i18n>assign}"/>
+													</Column>
+													<Column hAlign="Center" id="AdHoc" width="{= ${device>/system/phone} ? '20%' : '5%'}"
+														visible="{= ${controls>/isFormEntryEnabled}? true:false }"
+														minScreenWidth="{parts:[{path:'controls>/duplicateVisibility'},{path:'device>/system/phone'}],formatter:'.formatter.getMinScreenDevice'}"
+														popinDisplay="WithoutHeader" demandPopin="true">
+														<Text text="{i18n>formEntry}" visible="false"/>
+													</Column>
+													<Column id="info" demandPopin="true"
+														width="{parts:[{path:'device>/system/phone'},{path:'controls>/duplicateVisibility'}],formatter:'.formatter.formatInfo'}"
+														minScreenWidth="{parts:[{path:'controls>/duplicateVisibility'},{path:'device>/system/phone'}],formatter:'.formatter.getMinScreenDevice'}"
+														hAlign="Center">
+														<Text text="{i18n>info}"
+															visible="{parts:[{path:'controls>/duplicateVisibility'},{path:'device>/system/phone'}],formatter:'.formatter.getColumnVisible'}"/></Column>
+													<Column id="hours" width="{= ${device>/system/phone} ? '' : '20%'}" minScreenWidth="Desktop"
+														popinDisplay="{= ${controls>/duplicateVisibility} ? 'Block' : 'Inline'}" demandPopin="true" hAlign="Center">
+														<Text text="{i18n>enteredColumn}"/>
+													</Column>
+													<Column id="draft" width="{= ${device>/system/phone} ? '' : '7%'}" hAlign="Center" visible="{controls>/submitDraft}"
+														minScreenWidth="Desktop" demandPopin="true">
+														<Text text="{i18n>InProcess}"/>
+													</Column>
+													<!--<Column id="project" width="{= ${device>/system/phone} ? '' : '8%'}" hAlign="Center" visible="false" minScreenWidth="Desktop"-->
+													<!--	demandPopin="true">-->
+													<!--	<Text text="{i18n>project}"/>-->
+													<!--</Column>-->
+													<Column id="startTime" width="{= ${device>/system/phone} ? '' : '14%'}" hAlign="End" visible="{=${controls>/clockTimeVisible} ? true:false}"
+														minScreenWidth="Desktop" popinDisplay="{= ${controls>/duplicateVisibility} ? 'Block' : 'Inline'}" demandPopin="true">
+														<Text text="{i18n>startTime}"/>
+													</Column>
+													<Column id="endTime" width="{= ${device>/system/phone} ? '' : '14%'}" hAlign="End" visible="{=${controls>/clockTimeVisible} ? true:false}"
+														minScreenWidth="Desktop" popinDisplay="{= ${controls>/duplicateVisibility} ? 'Block' : 'Inline'}" demandPopin="true">
+														<Text text="{i18n>endTime}"/>
+													</Column>
+													<Column id="previousDayIndicator" width="{= ${device>/system/phone} ? '' : '10%'}" hAlign="Center"
+														visible="{=${controls>/previousDayIndicator} ? true:false}" minScreenWidth="Desktop" demandPopin="true">
+														<Text text="{i18n>previousDayIndicator}"/>
+													</Column>
+													<Column id="status" width="{= ${device>/system/phone} ? '' : '10%'}" minScreenWidth="Desktop"
+														popinDisplay="{= ${controls>/duplicateVisibility} ? 'Block' : 'Inline'}" demandPopin="true" hAlign="Center">
+														<Text text="{i18n>status}"/>
+													</Column>
+													<Column id="comments" width="{= ${device>/system/phone} ? '' : '4%'}" minScreenWidth="Desktop" hAlign="End" demandPopin="true">
+														<Text text="{i18n>comments}" visible="{= ${device>/system/phone} ? true : false}" textAlign="Center" width="100%"/>
+													</Column>
+													<Column id="attributes" mergeDuplicates="true" width="{= ${device>/system/phone} ? '' : '10%'}" minScreenWidth="5000px"
+														popinDisplay="Inline" hAlign="Center" demandPopin="true">
+														<Text text="{i18n>defaultFieldGroupName}"/>
+													</Column>
+													<Column id="editDelete" width="{= ${device>/system/phone} ? '' : '15%'}" popinDisplay="WithoutHeader"
+														hAlign="{= ${device>/system/phone} ? 'End' : 'Begin'}">
+														<Text text="{i18n>addDelete}" visible="false"/>
+													</Column>
+													<!--Allows to add columns to the overview table -->
+													<core:ExtensionPoint name="overviewTableColumnsExtension"/>
+													<!--<Column width="10%" hAlign="End" id="add"> -->
+													<!--	<Text text="{i18n>add}" visible="false"/>-->
+													<!--</Column>-->
+												</columns>
+												<items>
+													<ColumnListItem type="Detail" highlight="Information">
+														<cells>
+															<ObjectStatus
+																text="{parts:[{path:'TimeData>totalHours', type: 'sap.ui.model.odata.type.Decimal', formatOptions: { parseAsString: true, decimals: 2, maxFractionDigits: 2, minFractionDigits: 0 }, constraints: { precision: 4, scale: 2, minimum: '0', maximum: '10000' }},{path:'TimeData>target', type: 'sap.ui.model.odata.type.Decimal', formatOptions: { parseAsString: true, decimals: 2, maxFractionDigits: 2, minFractionDigits: 0 }, constraints: { precision: 4, scale: 2, minimum: '0', maximum: '10000' }}], formatter:'.formatter.concatStrings'}"/>
+															<!--</l:VerticalLayout>-->
+															<Link
+																text="{parts:[{path:'TimeData>AssignmentName'},{path:'TimeData>AssignmentId'},{path:'TimeData>Counter'}],formatter:'.formatter.assignmentName'}"
+																press="onAssignmentQuickView"/>
+															<ObjectNumber
+																number="{parts:[{path:'TimeData>TimeEntryDataFields/CATSHOURS'},{path:'TimeData>TimeEntryDataFields/CATSQUANTITY'},{path:'TimeData>TimeEntryDataFields/CATSAMOUNT'}],formatter: '.formatter.calHoursQuanAmount'}"
+																class="sapUiSmallMarginBottom"
+																unit="{parts:[{path:'TimeData>TimeEntryDataFields/UNIT'},{path:'TimeData>TimeEntryDataFields/CATSHOURS'}],formatter:'.formatter.getUnitTexts'}"/>
+															<CheckBox select="onCheckboxSelection" visible="{controls>/submitDraft}"/>
+															<Button icon="sap-icon://activity-items" type="Transparent"
+																visible="{parts:[{path:'TimeData>TimeEntryDataFields/CPR_GUID'},{path:'TimeData>TimeEntryDataFields/CPR_OBJGUID'}],formatter:'.formatter.projectsVisible'}"
+																press="onProjectDetails"/>
+															<!--                 <ObjectIdentifier visible="{=${controls>/clockTimeVisible == true} ? true:false}"-->
+															<!--text="{parts:[{path:'TimeData>TimeEntryDataFields/BEGUZ'},{path:'TimeData>TimeEntryDataFields/ENDUZ'}],formatter:'.formatter.concatTimeStrings'}"/>-->
+															<ObjectStatus visible="{=${controls>/clockTimeVisible == true} ? true:false}" text="{TimeData>TimeEntryDataFields/BEGUZ}"/>
+															<ObjectStatus visible="{=${controls>/clockTimeVisible == true} ? true:false}" text="{TimeData>TimeEntryDataFields/ENDUZ}"/>
+															<ObjectStatus text="{path:'TimeData>TimeEntryDataFields/STATUS', formatter:'.formatter.status'}"
+																state="{path:'TimeData>TimeEntryDataFields/STATUS', formatter:'.formatter.state'}"/>
+															<Button icon="sap-icon://notification-2" type="Transparent"
+																visible="{parts:[{path:'TimeData>TimeEntryDataFields/LONGTEXT'},{path:'TimeData>RejReasondesc'}],formatter:'.formatter.visibility'}"
+																press="displaylongtextPopover"/>
+															<!--Allows you to add cells to the rows of overview table -->
+															<core:ExtensionPoint name="overviewTableRowsExtension"/>
+														</cells>
+													</ColumnListItem>
+												</items>
+											</Table>
+										</l:HorizontalLayout>
+									</l:mainContent>
+								</l:DynamicSideContent>
+							</VBox>
+						</uxap:blocks>
+					</uxap:ObjectPageSubSection>
+				</uxap:subSections>
+			</uxap:ObjectPageSection>
+			<!--</l:content>-->
+			<!--</l:Grid>-->
+			<!--</IconTabFilter>-->
+			<!--<IconTabFilter text="{parts:['i18n>todolistNew','TodoList>/length'],formatter: 'jQuery.sap.formatMessage'}" key="todolist">-->
+			<uxap:ObjectPageSection id="todolist" title="{parts:['i18n>todolistNew','TodoList>/length'],formatter: 'jQuery.sap.formatMessage'}">
+				<uxap:subSections>
+					<uxap:ObjectPageSubSection title="{parts:['i18n>todolistNew','TodoList>/length'],formatter: 'jQuery.sap.formatMessage'}">
+						<uxap:blocks>
+							<VBox>
+								<MessageStrip id="InitialToDoListMessageStrip" visible="{controls>/showInformationMessage}" text="{i18n>overviewMessageStrip}"
+									showCloseButton="true" type="Information" showIcon="true" class="sapUiMediumMarginBottom">
+									<link><Link text="{i18n>clickHere}" press="navigateToTasks"/></link>
+								</MessageStrip>
+								<MessageStrip id="ToDoListMessageStrip" visible="{controls>/showInformationMessageWithRange}" showCloseButton="true" type="Information"
+									showIcon="true" class="sapUiMediumMarginBottom"></MessageStrip>
+								<VBox id="todoLayout"
+									visible="{parts:[{path:'controls>/currentTodoAdHoc'},{path:'controls>/isFormEntryEnabled'}],formatter:'.formatter.getAdHocVisible'}">
+									<core:Fragment fragmentName="hcm.fab.mytimesheet.view.fragments.adHocTodoFragment" type="XML"/>
+								</VBox>
+								<Table visible="{= ${controls>/currentTodoAdHoc} ? false : true}" sticky="HeaderToolbar,InfoToolbar,ColumnHeaders" id="idToDoList"
+									noDataText="{i18n>noToDoListItems}" growing="true" growingThreshold="100" mode="None"
+									items="{path:'TodoList>/', sorter: { path: 'TimeEntryDataFields/WORKDATE', descending: false }}" enableBusyIndicator="true">
+									<headerToolbar>
+										<OverflowToolbar id="idTodo">
+											<Title text="{parts:['i18n>toDoListItems','TodoList>/length'],formatter: 'jQuery.sap.formatMessage'}" level="H2"/>
+											<ToolbarSpacer/>
+											<Button id="editButtonTodo" text="{i18n>enterRecords}" tooltip="{i18n>enterRecords}" type="Transparent"
+												visible="{= ${device>/system/phone} ? false : ${controls>/editTodoVisibility}}" press="onToDoCheckLocking"/>
+											<Button icon="sap-icon://action-settings" press="onPersTodoButtonPressed"/>
+											<!--Allows you to add buttons to the To Do List table toolbar-->
+											<core:ExtensionPoint name="todolistTableToolbarExtension"/>
+										</OverflowToolbar>
+									</headerToolbar>
+									<columns>
+										<Column mergeDuplicates="true" id="todoDate" hAlign="Begin">
+											<Text text="{i18n>date}"/>
+										</Column>
+										<Column id="todoEntered" minScreenWidth="Desktop" popinDisplay="{= ${controls>/editTodoVisibility} ? 'Inline' : 'Block'}" demandPopin="true"
+											hAlign="Center">
+											<Text text="{parts:['i18n>record','i18n>Submitted','i18n>target'],formatter: 'jQuery.sap.formatMessage'}"/>
+										</Column>
+										<Column hAlign="Center" id="todoMissing" minScreenWidth="Desktop" popinDisplay="{= ${controls>/editTodoVisibility} ? 'Inline' : 'Block'}"
+											demandPopin="true">
+											<Text text="{i18n>missingHours}"/>
+										</Column>
+										<Column hAlign="Center" id="todoAssignment" width="{= ${device>/system/phone} ? '70%' : '20%'}" minScreenWidth="Desktop"
+											popinDisplay="{= ${controls>/editTodoVisibility} ? 'Inline' : 'Block'}" demandPopin="true">
+											<Text text="{i18n>assign}"/>
+										</Column>
+										<Column hAlign="Center" id="todoAdHoc" width="{= ${device>/system/phone} ? '3%' : '3%'}" demandPopin="true"
+											minScreenWidth="{parts:[{path:'controls>/editTodoVisibility'},{path:'device>/system/phone'}],formatter:'.formatter.getMinScreenDeviceTodo'}"
+											popinDisplay="WithoutHeader">
+											<Text text="{i18n>formEntry}" visible="false"/>
+										</Column>
+										<Column id="todoHours" minScreenWidth="Desktop" width="{= ${device>/system/phone} ? '' : '16%'}"
+											popinDisplay="{= ${controls>/editTodoVisibility} ? 'Inline' : 'Block'}" demandPopin="true" hAlign="Center">
+											<Text text="{i18n>enteredColumn}"/>
+										</Column>
+										<Column id="draftToDo" width="{= ${device>/system/phone} ? '' : '5%'}" hAlign="Center" visible="{controls>/submitDraft}"
+											minScreenWidth="Desktop" demandPopin="true">
+											<Text text="{i18n>InProcess}"/>
+										</Column>
+										<Column id="todoStartTime" hAlign="Center" width="{= ${device>/system/phone} ? '' : '10%'}"
+											visible="{=${controls>/clockTimeVisible} ? true:false}" minScreenWidth="Desktop"
+											popinDisplay="{= ${controls>/editTodoVisibility} ? 'Inline' : 'Block'}" demandPopin="true">
+											<Text text="{i18n>startTime}"/>
+										</Column>
+										<Column id="todoEndTime" hAlign="Center" width="{= ${device>/system/phone} ? '' : '10%'}"
+											visible="{=${controls>/clockTimeVisible} ? true:false}" minScreenWidth="Desktop"
+											popinDisplay="{= ${controls>/editTodoVisibility} ? 'Inline' : 'Block'}" demandPopin="true">
+											<Text text="{i18n>endTime}"/>
+										</Column>
+										<Column id="toDoPreviousDayIndicator" width="{= ${device>/system/phone} ? '' : '5%'}" hAlign="End"
+											visible="{=${controls>/previousDayIndicator} ? true:false}" minScreenWidth="Desktop" demandPopin="true">
+											<Text text="{i18n>previousDayIndicator}"/>
+										</Column>
+										<Column id="todoStatus" minScreenWidth="Desktop" popinDisplay="{= ${controls>/editTodoVisibility} ? 'Inline' : 'Block'}" demandPopin="true"
+											hAlign="Left">
+											<Text text="{i18n>status}"/>
+										</Column>
+										<Column id="todoComments" minScreenWidth="Desktop" demandPopin="true" hAlign="{= ${device>/system/phone} ? 'Center' : 'Center'}"
+											width="{= ${device>/system/phone} ? '' : '2%'}">
+											<Text text="{i18n>comments}" visible="{= ${device>/system/phone} ? true : false}" textAlign="Left" width="100%"/>
+										</Column>
+										<!--<Column minScreenWidth="Tablet" width="10%" id="todoButton" demandPopin="true" popinDisplay="WithoutHeader"-->
+										<!--	visible="{= ${device>/system/phone} ? false : true}">-->
+										<!--	<Text text="{i18n>sendForApproval}" visible="false"/>-->
+										<!--</Column>-->
+										<Column id="add" hAlign="{= ${device>/system/phone} ? 'End' : 'Left'}" width="{= ${device>/system/phone} ? '' : '6%'}">
+											<Text text="{i18n>addDelete}" visible="false"/>
+										</Column>
+										<Column id="attributesTodo" mergeDuplicates="true" width="{= ${device>/system/phone} ? '' : '10%'}" minScreenWidth="5000px"
+											popinDisplay="Inline" hAlign="Center" demandPopin="true">
+											<Text text="{i18n>defaultFieldGroupName}"/>
+										</Column>
+										<!--Allows you to add columns to the To Do List table -->
+										<core:ExtensionPoint name="todolistTableColumnsExtension"/>
+										<!--<Column id="edit" width="5%" hAlign="End" visible="{= ${device>/system/phone} ? true : false}">-->
+										<!--	<Text visible="{= ${device>/system/phone} ? false : true}"/>-->
+										<!--</Column>-->
+									</columns>
+									<items>
+										<ColumnListItem >
+											<cells>
+												<Text text="{path: 'TodoList>TimeEntryDataFields/WORKDATE', type: 'sap.ui.model.type.Date', formatOptions: { style: 'full' }}"/>
+												<!--<ObjectStatus text="{parts:[{path:'TodoList>total'},{path:'TodoList>target'}], formatter:'.formatter.concatStrings'}"-->
+												<!--	state="{path:'TodoList>TimeEntryDataFields/STATUS', formatter:'.formatter.TodoState'}"/>-->
+												<Link
+													text="{parts:[{path:'TodoList>total', type: 'sap.ui.model.odata.type.Decimal', formatOptions: { parseAsString: true, decimals: 2, maxFractionDigits: 2, minFractionDigits: 0 }, constraints: { precision: 4, scale: 2, minimum: '0', maximum: '10000' }},{path:'TodoList>target', type: 'sap.ui.model.odata.type.Decimal', formatOptions: { parseAsString: true, decimals: 2, maxFractionDigits: 2, minFractionDigits: 0 }, constraints: { precision: 4, scale: 2, minimum: '0', maximum: '10000' }}], formatter:'.formatter.concatStrings'}"
+													press="handleRecordedVsTargetLinkPress"/>
+												<ObjectStatus
+													text="{path:'TodoList>currentMissing' , type: 'sap.ui.model.odata.type.Decimal', formatOptions: { parseAsString: true, decimals: 2, maxFractionDigits: 2, minFractionDigits: 0 }, constraints: { precision: 4, scale: 2, minimum: '0', maximum: '10000' }}"/>
+												<ObjectIdentifier title="{TodoList>AssignmentName}"/>
+												<ObjectIdentifier title="" visible="false"/>
+												<!--<ObjectStatus text="{path:'TodoList>missing'}" state="{path:'TodoList>TimeEntryDataFields/status', formatter:'.formatter.TodoState'}"/>-->
+												<!--<ObjectStatus text="{path:'TodoList>TimeEntryDataFields/BEGUZ'}" visible="{=${controls>/clockTimeVisible} ? true:false}"/>-->
+												<!--<ObjectStatus text="{path:'TodoList>TimeEntryDataFields/ENDUZ'}" visible="{=${controls>/clockTimeVisible} ? true:false}"/>-->
+												<!--<ObjectStatus text="{path:'TodoList>TimeEntryDataFields/CATSHOURS'}"/>-->
+												<ObjectNumber
+													number="{parts:[{path:'TodoList>TimeEntryDataFields/CATSHOURS'},{path:'TodoList>TimeEntryDataFields/CATSQUANTITY'},{path:'TodoList>TimeEntryDataFields/CATSAMOUNT'}],formatter: '.formatter.calHoursQuanAmount'}"
+													class="sapUiSmallMarginBottom"
+													unit="{parts:[{path:'TodoList>TimeEntryDataFields/UNIT'},{path:'TodoList>TimeEntryDataFields/CATSHOURS'}],formatter:'.formatter.getUnitTexts'}"/>
+												<CheckBox selected="{TodoList>SetDraft}" visible="{controls>/isDraftEnabled}" editable="false"/>
+												<ObjectStatus
+													text="{parts:[{path:'TodoList>TimeEntryDataFields/BEGUZ'},{path:'TodoList>TimeEntryDataFields/ENDUZ'}], formatter:'.formatter.formatStartReadOnlyTime'}"
+													visible="{=${controls>/clockTimeVisible} ? true:false}"/>
+												<ObjectStatus
+													text="{parts:[{path:'TodoList>TimeEntryDataFields/BEGUZ'},{path:'TodoList>TimeEntryDataFields/ENDUZ'}], formatter:'.formatter.formatEndReadOnlyTime'}"
+													visible="{=${controls>/clockTimeVisible} ? true:false}"/>
+												<CheckBox selected="{path : 'TodoList>TimeEntryDataFields/VTKEN', formatter : '.formatter.checkPrevDay'}"
+													visible="{=${controls>/previousDayIndicator} ? true:false}" editable="false"/>
+												<ObjectStatus text="{path:'TodoList>TimeEntryDataFields/STATUS',formatter:'.formatter.status'}"
+													state="{path:'TodoList>TimeEntryDataFields/STATUS', formatter:'.formatter.TodoState'}"/>
+												<Button type="Transparent" icon="{ path: 'TodoList>TimeEntryDataFields/LONGTEXT', formatter: '.formatter.longtextButtons'}"
+													visible="{parts:[{path:'TodoList>TimeEntryDataFields/LONGTEXT'},{path:'TodoList>RejReasondesc'}],formatter:'.formatter.visibility'}"
+													press="displayTodoLongtextPopover" tooltip="{i18n>comment}"/>
+												<!--<Text text=""/>-->
+												<Text text=""/>
+												<Text text="{parts:[{path:'TodoList>TimeEntryDataFields'},{path:'ToDoAttributes>/state'}],formatter:'.formatter.ConcatenateText'}"/>
+												<!--Allows you to add cells to the rows of To Do List table -->
+												<core:ExtensionPoint name="todolistTableRowsExtension"/>
+												<!--<Button type="Transparent" icon="sap-icon://edit" visible="{= ${device>/system/phone} ? true : false}" press="onEditTodoListMobile"/>-->
+											</cells>
+										</ColumnListItem>
+									</items>
+								</Table>
+							</VBox>
+						</uxap:blocks>
+					</uxap:ObjectPageSubSection>
+				</uxap:subSections>
+			</uxap:ObjectPageSection>
+			<!--</IconTabFilter>-->
+			<!--<IconTabFilter text="{i18n>assignmen}" key="tasks">-->
+			<uxap:ObjectPageSection id="tasks" title="{i18n>assignmen}">
+				<uxap:subSections>
+					<uxap:ObjectPageSubSection title="{i18n>assignmen}">
+						<uxap:blocks>
+							<VBox>
+								<!--<Button icon="sap-icon://message-information" type="Transparent" press="onShowAssignmentsMessage"-->
+								<!--	visible="{=${controls>/showAssignmentsMessage} ? false: true}"/>-->
+								<MessageStrip id="InitialAssignmentsMessageStrip" visible="{controls>/showAssignmentsMessage}" text="{i18n>overviewMessageStrip}"
+									showCloseButton="true" type="Information" showIcon="true" class="sapUiMediumMarginBottom"></MessageStrip>
+								<MessageStrip id="AssignmentsMessageStrip" visible="{controls>/showAssignementMessageWithRange}" showCloseButton="true" type="Information"
+									showIcon="true" class="sapUiMediumMarginBottom"></MessageStrip>
+								<Table sticky="HeaderToolbar,InfoToolbar,ColumnHeaders" id="idTasks" growing="true" noDataText="{i18n>overviewMessageStrip}"
+									growingThreshold="{= ${device>/system/phone} ? 10 : 20}" selectionChange="onTaskSelection" mode="MultiSelect"
+									items="{path:'TaskFields>/',factory:'.dynamicBindingRows'}" columns="{path:'ProfileFields>/', factory:'.dynamicBindingColumns'}"
+									enableBusyIndicator="true">
+									<headerToolbar>
+										<OverflowToolbar id="idAssignmentOverflow">
+											<!--<Toolbar>-->
+											<SegmentedButton selectedKey="Yes">
+												<items>
+													<SegmentedButtonItem text="{parts:['i18n>allNumber','Tasks>/length'],formatter: 'jQuery.sap.formatMessage'}"
+														tooltip="{parts:['i18n>allNumber','Tasks>/length'],formatter: 'jQuery.sap.formatMessage'}" key="Yes" press="onTaskAll"/>
+													<SegmentedButtonItem text="{parts:['i18n>active','controls>/tasksActiveLength'],formatter: 'jQuery.sap.formatMessage'}"
+														tooltip="{parts:['i18n>active','controls>/tasksActiveLength'],formatter: 'jQuery.sap.formatMessage'}" press="onTaskActive"/>
+													<SegmentedButtonItem text="{parts:['i18n>inactive','controls>/tasksInactiveLength'],formatter: 'jQuery.sap.formatMessage'}"
+														tooltip="{parts:['i18n>inactive','controls>/tasksInactiveLength'],formatter: 'jQuery.sap.formatMessage'}" press="onTaskInactive"/>
+												</items>
+											</SegmentedButton>
+											<ToolbarSpacer/>
+											<!--<DateRangeSelection width="20%" dateValue="{path:'/dateValueDRS2'}" secondDateValue="{path:'/secondDateValueDRS2'}"-->
+											<!--	minDate="{path:'/dateMinDRS2'}" maxDate="{path:'/dateMaxDRS2'}" change="handleDateChange"/>-->
+											<SearchField width="20%" search="handleSearchAssignments"/>
+											<MenuButton text="{i18n>create}">
+												<menu>
+													<Menu itemSelected="onMenuAction">
+														<items>
+															<MenuItem text="{i18n>assign}" key="selectFromAssignment"/>
+															<MenuItem text="{i18n>assignGroup}" key="selectFromGroups"/>
+														</items>
+													</Menu>
+												</menu>
+											</MenuButton>
+											<!--<Button id="createGroupAssignment" text="{i18n>createGroup}" tooltip="{i18n>createGroup}" type="Transparent" press="onCreateGroup"/>-->
+											<!--<Button id="importWorklistButton" text="{i18n>import}" tooltip="{i18n>import}" type="Transparent" press="onImportWorklist"-->
+											<!--	visible="{controls>/importWorklist}"/>-->
+											<MenuButton text="{i18n>import}">
+												<menu>
+													<Menu itemSelected="onMenuAction">
+														<items>
+															<MenuItem text="{i18n>fromWorklist}" visible="{controls>/importWorklist}" key="selectFromWorklist"/>
+															<MenuItem text="{i18n>fromAdminAssignments}" key="selectFromAdminlist"/>
+														</items>
+													</Menu>
+												</menu>
+											</MenuButton>
+											<Button id="copyButtonAssignment" text="{i18n>copy}" tooltip="{i18n>copy}" type="Transparent" press="onCopyTask"
+												enabled="{controls>/taskCopy}"/>
+											<!--<Button id="saveButtonAssignment" text="{i18n>edit}" tooltip="{i18n>edit}" type="Transparent" press="onTaskEdit"-->
+											<!--	enabled="{controls>/taskEdit}"/>-->
+											<Button id="deleteButtonAssignment" text="{i18n>delete}" tooltip="{i18n>delete}" type="Transparent" press="onTaskDeleteConfirm"
+												enabled="{controls>/taskDelete}"/>
+											<!--Note 2890326  -->
+											<!--<Button id="editButtonAssignment" icon="sap-icon://add" type="Transparent" press="onTaskCreate"/>-->
+											<Button id="filterGroupAssignment" icon="sap-icon://filter" type="Transparent" press="handleDateChange"/>
+											<Button icon="sap-icon://action-settings" press="onPersTaskButtonPressed"/>
+											<!--Allows you to add buttons to the Assignments table toolbar-->
+											<core:ExtensionPoint name="assignmentsTableToolbarExtension"/>
+											<!--</Toolbar>-->
+										</OverflowToolbar>
+									</headerToolbar>
+								</Table>
+							</VBox>
+						</uxap:blocks>
+					</uxap:ObjectPageSubSection>
+				</uxap:subSections>
+			</uxap:ObjectPageSection>
+			<!--</IconTabFilter>-->
+			<!--<IconTabFilter text="{i18n>assignmenGroups}" key="groups">-->
+			<uxap:ObjectPageSection id="groups" title="{i18n>assignmenGroups}">
+				<uxap:subSections>
+					<uxap:ObjectPageSubSection title="{i18n>assignmenGroups}">
+						<uxap:blocks>
+							<VBox>
+								<!--<Button icon="sap-icon://message-information" type="Transparent" press="onShowGroupMessage"-->
+								<!--	visible="{=${controls>/showGroupMessage} ? false: true}"/>-->
+								<MessageStrip id="InitialAssignmentGroupsMessageStrip" visible="{controls>/showGroupMessage}" text="{i18n>groupMessagestrip}"
+									showCloseButton="true" type="Information" showIcon="true"></MessageStrip>
+								<MessageStrip id="AssignmentGroupsMessageStrip" visible="{controls>/showInformationMessageWithRange}" showCloseButton="true"
+									type="Information" showIcon="true" class="sapUiMediumMarginBottom"></MessageStrip>
+								<Table id="idGroups" growing="true" growingThreshold="10" noDataText="{i18n>groupMessagestrip}" selectionChange="onGroupSelection"
+									mode="MultiSelect" items="{AssignmentGroups>/}" enableBusyIndicator="true">
+									<headerToolbar>
+										<OverflowToolbar>
+											<ToolbarSpacer/>
+											<SearchField width="{= ${device>/system/phone} ? '50%' : '20%' }" class="sapUiSmallMargin" search="handleSearchGroups"/>
+											<Button id="createGroup" text="{i18n>create}" tooltip="{i18n>create}" type="Transparent" press="onCreateGroup"/>
+											<!--<Button text="{i18n>edit}" tooltip="{i18n>edit}" type="Transparent" press="onEditGroup" enabled="{controls>/EditGroup}"/>-->
+											<Button text="{i18n>delete}" tooltip="{i18n>delete}" type="Transparent" press="onGroupDeleteConfirm" enabled="{controls>/DeleteGroup}"/>
+											<!--Note 2890326 -->
+											<!--Allows you to add buttons to the Assignment Groups table toolbar-->
+											<core:ExtensionPoint name="assignmentGroupsTableToolbarExtension"/>
+										</OverflowToolbar>
+									</headerToolbar>
+									<columns>
+										<Column mergeDuplicates="true" id="groupName" hAlign="Begin">
+											<Text text="{i18n>name}"/>
+										</Column>
+										<!--<Column hAlign="Center" id="description" minScreenWidth="Tablet" demandPopin="true">-->
+										<!--	<Text text="{i18n>description}"/>-->
+										<!--</Column>-->
+										<Column id="numberOfAssignments" hAlign="End">
+											<Text text="{i18n>numberOfAssignments}"/>
+										</Column>
+									</columns>
+									<items>
+										<ColumnListItem type="Navigation" press="onDisplayGroup">
+											<cells>
+												<Text text="{AssignmentGroups>groupName}"/>
+												<!--<Text text=""/>-->
+												<!--<Text text=""/>-->
+												<Text text="{AssignmentGroups>count}"/>
+											</cells>
+										</ColumnListItem>
+									</items>
+								</Table>
+							</VBox>
+						</uxap:blocks>
+					</uxap:ObjectPageSubSection>
+				</uxap:subSections>
+			</uxap:ObjectPageSection>
+			<!--Allows you to add icon tab bar sections to the worklist page-->
+			<core:ExtensionPoint name="worklistTabSectionExtension"/>
+		</uxap:sections>
+		<uxap:footer>
+			<OverflowToolbar>
+				<Button icon="sap-icon://message-popup" text="{message>/length}" type="Emphasized" visible="{= !!${message>/length}}"
+					tooltip="{i18n>messagePopup}" press="handleMessagePopover"/>
+				<ToolbarSpacer/>
+				<Button id="OverviewCheckButton"
+					visible="{parts:[{path:'controls>/sendForApprovalCheck'},{path:'controls>/currentAdHoc'}],formatter:'.formatter.checkVisible'}"
+					type="Emphasized" text="{i18n>check}" tooltip="{i18n>check}" enabled="{controls>/overviewDataChangedWithCheck}" press="onCheckEntries"/>
+				<Button id="OverviewSubmitButton" type="Emphasized" text="{i18n>submit}" tooltip="{i18n>submit}" enabled="{controls>/overviewDataChanged}"
+					press="onSendApprovalCheck"
+					visible="{parts:[{path:'controls>/sendForApproval'},{path:'controls>/currentAdHoc'}],formatter:'.formatter.submitEnabled'}"/>
+				<!--<Button type="Transparent" text="{i18n>save}" tooltip="{i18n>save}" press="onSubmitDraft" visible="{controls>/submitDraft}"/>-->
+				<Button text="{i18n>ok}" tooltip="{i18n>ok}" type="Emphasized" press="onAdHocOkPress" visible="{controls>/currentAdHoc}"/>
+				<Button text="{i18n>cancel}" tooltip="{i18n>cancel}" type="Transparent" press="onCancelConfirm"
+					visible="{parts:[{path:'controls>/overviewCancel'},{path:'controls>/currentAdHoc'}],formatter:'.formatter.checkVisible'}"/>
+				<Button text="{i18n>cancel}" tooltip="{i18n>cancel}" type="Transparent" press="onPressCancelButtonAdHoc" visible="{controls>/currentAdHoc}"/>
+				<Button id="ToDoCheckButton" text="{i18n>check}" tooltip="{i18n>check}" type="Emphasized" enabled="{controls>/todoDataChangedWithCheck}"
+					press="onCheckEntriesToDo"
+					visible="{parts:[{path:'controls>/todoDoneCheck'},{path:'controls>/currentTodoAdHoc'}],formatter:'.formatter.checkVisible'}"/>
+				<Button id="ToDoSubmitButton" text="{i18n>submit}" tooltip="{i18n>submit}" type="Emphasized" enabled="{controls>/todoDataChanged}"
+					press="onToDoSubmitCheck"
+					visible="{parts:[{path:'controls>/todoDone'},{path:'controls>/currentTodoAdHoc'}],formatter:'.formatter.checkVisible'}"/>
+				<Button text="{i18n>ok}" tooltip="{i18n>ok}" type="Emphasized" press="onTodoAdHocOkPress" visible="{controls>/currentTodoAdHoc}"/>
+				<Button text="{i18n>cancel}" tooltip="{i18n>cancel}" type="Transparent" press="onTodoCancelConfirm"
+					visible="{parts:[{path:'controls>/todoCancel'},{path:'controls>/currentTodoAdHoc'}],formatter:'.formatter.checkVisible'}"/>
+				<Button text="{i18n>cancel}" tooltip="{i18n>cancel}" type="Transparent" press="onPressCancelButtonAdHocTodo"
+					visible="{controls>/currentTodoAdHoc}"/>
+				<Button id="mEditButton" text="{i18n>enterRecords}" tooltip="{i18n>enterRecords}" type="Transparent" press="onCheckLocking"
+					visible="{parts:[{path:'controls>/overviewEdit'},{path:'device>/system/phone'}],formatter:'.formatter.isEnterButtonFooterEnabled'}"
+					enabled="{controls>/overviewEditEnabled}"/>
+				<Button id="mEditButtonTodo" text="{i18n>enterRecords}" tooltip="{i18n>enterRecords}" type="Transparent"
+					visible="{parts:[{path:'controls>/editTodoVisibility'},{path:'device>/system/phone'}],formatter:'.formatter.isEnterButtonFooterEnabled'}"
+					press="onToDoCheckLocking"/>
+				<!--Allows you to add buttons to the worklist page footer bar-->
+				<core:ExtensionPoint name="worklistFooterExtension"/>
+			</OverflowToolbar>
+		</uxap:footer>
+	</uxap:ObjectPageLayout>
+</mvc:View>

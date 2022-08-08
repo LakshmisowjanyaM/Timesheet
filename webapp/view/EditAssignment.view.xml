@@ -1,0 +1,93 @@
+<!--
+
+    Copyright (C) 2009-2020 SAP SE or an SAP affiliate company. All rights reserved.
+
+-->
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:f="sap.ui.layout.form" xmlns:semantic="sap.m.semantic"
+	xmlns:sf="sap.f" xmlns:l="sap.ui.layout" xmlns:u="sap.uxap" xmlns:block="hcm.fab.mytimesheet.view.blocks"
+	controllerName="hcm.fab.mytimesheet.controller.EditAssignment" xmlns:bl="hcm.fab.mytimesheet.view.blocks"
+	xmlns:html="http://www.w3.org/1999/xhtml">
+	<!--<u:ObjectPageLayout id="ObjectPageLayout" upperCaseAnchorBar="false" enableLazyLoading="true"-->
+	<!--	showFooter="{= ${controls>/displayAssignment} ? false : true}">-->
+	<!--	<u:headerTitle>-->
+	<!--		<u:ObjectPageHeader objectTitle="{EditedTask>/name}">-->
+	<!--			<u:actions>-->
+	<!--				<Button text="{i18n>edit}" type="Emphasized" press="onEdit" visible="{controls>/displayAssignment}"/>-->
+	<!--				<Button text="{i18n>delete}" press="onTaskDelete"/>-->
+	<!--			</u:actions>-->
+	<!--		</u:ObjectPageHeader>-->
+	<!--	</u:headerTitle>-->
+	<!--	<u:sections>-->
+	<!--		<u:ObjectPageSection title="{i18n>Header}">-->
+	<!--			<u:subSections>-->
+	<!--				<u:ObjectPageSubSection mode="Expanded" id="Section1"></u:ObjectPageSubSection>-->
+	<!--			</u:subSections>-->
+	<!--		</u:ObjectPageSection>-->
+	<!--		<u:ObjectPageSection title="{i18n>details}">-->
+	<!--			<u:subSections>-->
+	<!--				<u:ObjectPageSubSection mode="Expanded" id="Section2">-->
+	<!--					<u:blocks></u:blocks>-->
+	<!--				</u:ObjectPageSubSection>-->
+	<!--			</u:subSections>-->
+	<!--		</u:ObjectPageSection>-->
+	<!--	</u:sections>-->
+	<!--	<u:footer>-->
+	<!--		<OverflowToolbar>-->
+	<!--			<Button id="messageList" icon="sap-icon://message-popup" text="{/messagesLength}" visible="{= !!${/messagesLength}}"-->
+	<!--				tooltip="{i18n>messagePopup}" press="handleMessagePopover"/>-->
+	<!--			<ToolbarSpacer/>-->
+	<!--			<Button type="Emphasized" text="{i18n>save}" press="onSave" visible="{= ${controls>/displayAssignment} ? false : true}"/>-->
+	<!--			<Button text="{i18n>cancel}" type="Transparent" press="onCancel" visible="{= ${controls>/displayAssignmentCancel} ? true : false}"/>-->
+	<!--			<Button text="{i18n>cancel}" type="Transparent" press="onDisplayCancel" visible="{= ${controls>/displayAssignment} ? true : false}"/>-->
+	<!--		</OverflowToolbar>-->
+	<!--	</u:footer>-->
+	<!--</u:ObjectPageLayout>-->
+	<u:ObjectPageLayout id="ObjectPageLayout" enableLazyLoading="true" upperCaseAnchorBar="false"
+		showFooter="{= ${controls>/showFooterAssignment} ? true : false}">
+		<u:headerTitle>
+			<u:ObjectPageHeader objectTitle="{Title>/Name}" objectSubtitle="{path:'EditedTask>/status', formatter:'.formatter.assignmentstatus'}">
+				<u:actions>
+					<Button text="{i18n>edit}" type="Transparent" press="onEdit" visible="{controls>/displayAssignment}"/>
+					<Button text="{i18n>delete}" press="onTaskDeleteConfirm" visible="{= ${controls>/createAssignment} ? false : true}"/>
+					<!--Allows you to add buttons to the edit assignment page actions-->
+					<core:ExtensionPoint name="editAssignmentActionsExtension"/>
+				</u:actions>
+			</u:ObjectPageHeader>
+		</u:headerTitle>
+		<u:sections>
+			<u:ObjectPageSection visible="{= ${controls>/displayAssignment} ? false : true}" title="{i18n>Header}" titleUppercase="false">
+				<u:subSections>
+					<u:ObjectPageSubSection title="{i18n>Header}" titleUppercase="false" mode="Expanded">
+						<u:blocks>
+							<bl:blockEditAssignmentHeader id="editHeaderBlockId"/>
+						</u:blocks>
+					</u:ObjectPageSubSection>
+				</u:subSections>
+			</u:ObjectPageSection>
+			<u:ObjectPageSection id="detailSectionId" title="{i18n>details}" titleUppercase="false">
+				<u:subSections>
+					<u:ObjectPageSubSection title="{i18n>details}" titleUppercase="false" mode="Expanded">
+						<u:blocks>
+							<bl:blockEditAssignmentDetails id="editDetailsBlockId"/>
+							<bl:blockDisplayAssignmentDetails id="displayDetailsBlockId"/>
+						</u:blocks>
+					</u:ObjectPageSubSection>
+				</u:subSections>
+			</u:ObjectPageSection>
+			<!--Allows you to add tab sections to the edit assignment page-->
+			<core:ExtensionPoint name="editAssignmentTabSectionsExtension"/>
+		</u:sections>
+		<u:footer>
+			<OverflowToolbar>
+				<Button icon="sap-icon://message-popup" text="{message>/length}" type="Emphasized" visible="{= !!${message>/length}}"
+					tooltip="{i18n>messagePopup}" press="handleMessagePopover"/>
+				<ToolbarSpacer/>
+				<Button type="Emphasized" text="{i18n>save}" press="onSave" visible="{= ${controls>/displayAssignment} ? false : true}"/>
+				<Button text="{i18n>cancel}" type="Transparent" press="onCancel" visible="{controls>/editAssignmentCancel}"/>
+				<Button text="{i18n>cancel}" type="Transparent" press="onDisplayCancel" visible="{= ${controls>/displayAssignmentCancel} ? true : false}"/>
+				<!--Allows you to add buttons to the edit assignment page footer bar-->
+				<core:ExtensionPoint name="editAssignmentFooterExtension"/>
+			</OverflowToolbar>
+		</u:footer>
+	</u:ObjectPageLayout>
+</mvc:View>

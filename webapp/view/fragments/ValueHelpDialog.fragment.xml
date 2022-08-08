@@ -1,0 +1,22 @@
+<!--
+
+    Copyright (C) 2009-2020 SAP SE or an SAP affiliate company. All rights reserved.
+
+-->
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:vh="sap.ui.comp.valuehelpdialog" class="sapUiSizeCompact">
+	<!--<SelectDialog-->
+	<!--	title="{controls>/fieldLabel}"-->
+	<!--	noDataText="{i18n>noData}"-->
+	<!--	search="handleSearch"-->
+	<!--	confirm="handleConfirm"-->
+	<!--	cancel="handleCancel"-->
+	<!--	items="{ValueHelp>/}">-->
+	<!--	<StandardListItem-->
+	<!--		title="{ValueHelp>DispField1Val}"-->
+	<!--		description="{ValueHelp>DispField1Id}"-->
+	<!--		press="handleClickValueHelp"-->
+	<!--		type="Active" />-->
+	<!--</SelectDialog>-->
+	<vh:ValueHelpDialog id="oValueHelpDialog" supportMultiselect="false" supportRanges="false" beforeOpen=".handleBeforeOpen" afterOpen=".handleAfterOpen" supportRangesOnly="false" title="{controls>/fieldLabel}"  ok=".handleConfirm" cancel=".handleCancel" afterClose=".handleAfterClose">
+    </vh:ValueHelpDialog>
+</core:FragmentDefinition>

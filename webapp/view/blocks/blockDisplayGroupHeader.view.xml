@@ -1,0 +1,21 @@
+<!--
+
+    Copyright (C) 2009-2020 SAP SE or an SAP affiliate company. All rights reserved.
+
+-->
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form" xmlns:core="sap.ui.core"
+	controllerName="hcm.fab.mytimesheet.controller.blockCommon">
+	<f:Form editable="true" layout="ResponsiveGridLayout">
+		<f:formContainers>
+			<f:FormContainer id="EDITFORMGROUP_HEADER" title="">
+				<f:formElements>
+					<f:FormElement label="{i18n>name}">
+						<f:fields>
+							<Text text="{createGroup>/groupName}"/>
+						</f:fields>
+					</f:FormElement>
+				</f:formElements>
+			</f:FormContainer>
+		</f:formContainers>
+	</f:Form>
+</mvc:View>

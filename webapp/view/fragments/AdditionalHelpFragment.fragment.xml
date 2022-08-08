@@ -1,0 +1,32 @@
+<!--
+
+    Copyright (C) 2009-2020 SAP SE or an SAP affiliate company. All rights reserved.
+
+-->
+<core:FragmentDefinition xmlns:f="sap.ui.layout.form" xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout"
+	class="sapUiSizeCompact">
+	<Dialog title="{AdditionHelp>/GroupName}" class="sapUiPopupWithPadding" contentWidth="40%"
+		stretch="{= ${device>/system/phone} ? true : false}">
+		<endButton>
+			<Button text="{i18n>close}" press="handleClose"/>
+		</endButton>
+		<content>
+			<l:VerticalLayout class="sapUiContentPadding" width="100%">
+				<l:content>
+					<List items="{ path: 'AdditionHelp>/groupHelp' }" itemPress="focusElement">
+						<CustomListItem class="sapUiSmallMarginTop" visible="{AdditionHelp>visible}" type="Active">
+							<content>
+								<VBox>
+									<items>
+										<Label class="sapUiSmallMarginTop" text="{AdditionHelp>label}" design="Bold"></Label>
+										<Text class="sapUiSmallMarginBottom" text="{AdditionHelp>AdditionHelp}"></Text>
+									</items>
+								</VBox>
+							</content>
+						</CustomListItem>
+					</List>
+				</l:content>
+			</l:VerticalLayout>
+		</content>
+	</Dialog>
+</core:FragmentDefinition>

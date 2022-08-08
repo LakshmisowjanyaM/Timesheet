@@ -1,0 +1,20 @@
+<!--
+
+    Copyright (C) 2009-2020 SAP SE or an SAP affiliate company. All rights reserved.
+
+-->
+<core:FragmentDefinition xmlns:f="sap.ui.layout.form" xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout"
+	class="sapUiSizeCompact">
+	<Dialog title="{AdditionHelp>/GroupName}" class="sapUiPopupWithPadding" contentWidth="30%">
+		<endButton>
+			<Button text="{i18n>close}" press="handleClose"/>
+		</endButton>
+		<content>
+			<l:VerticalLayout class="sapUiContentPadding" width="100%">
+				<l:content>
+					<Text text="{i18n>noAdditionalHelpText}"></Text>
+				</l:content>
+			</l:VerticalLayout>
+		</content>
+	</Dialog>
+</core:FragmentDefinition>

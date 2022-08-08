@@ -1,0 +1,82 @@
+<!--
+
+    Copyright (C) 2009-2020 SAP SE or an SAP affiliate company. All rights reserved.
+
+-->
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:f="sap.ui.layout.form" xmlns:l="sap.ui.layout"
+	controllerName="hcm.fab.mytimesheet.controller.blockCommon">
+	<f:Form layout="ResponsiveGridLayout" editable="false">
+		<f:formContainers>
+			<f:FormContainer id="aEDITFORM_HEADER" title="">
+				<f:formElements>
+					<f:FormElement label="{i18n>validFrom}">
+						<Text text="{path : 'DisplayAssignmentDetails>/validFrom',type : 'sap.ui.model.type.Date',formatOptions: {style : 'long'}}"/>
+					</f:FormElement>
+					<f:FormElement label="{i18n>validTo}">
+						<Text text="{path : 'DisplayAssignmentDetails>/validTo',type : 'sap.ui.model.type.Date',formatOptions: {style : 'long'}}"/>
+					</f:FormElement>
+				</f:formElements>
+			</f:FormContainer>
+		</f:formContainers>
+	</f:Form>
+	<VBox items="{DisplayAssignmentDetails>/fields/}">
+		<items>
+			<Panel visible="{=${DisplayAssignmentDetails>visible} === 'false'? false : true}">
+				<headerToolbar>
+					<Toolbar>
+						<Title level="H2" text="{DisplayAssignmentDetails>GroupName}"/>
+						<!--<Button icon="sap-icon://message-information"/>-->
+					</Toolbar>
+				</headerToolbar>
+				<f:Form id="EDITFORM_FIELDS" editable="false" formContainers="{path:'DisplayAssignmentDetails>containers/',templateShareable:false}">
+					<f:layout>
+						<!--<l:BlockBaseColumnLayout/>-->
+						<f:ResponsiveGridLayout columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="false"/>
+					</f:layout>
+					<!--<f:formContainers>-->
+					<f:FormContainer formElements="{path:'DisplayAssignmentDetails>form/',templateShareable:false}">
+						<f:formElements>
+							<!--<core:CustomData key="FieldName" value="{ProfileFields>FieldName}"></core:CustomData>-->
+							<f:FormElement visible="{= ${DisplayAssignmentDetails>Switch} ? false : true}">
+								<f:label>
+									<Label text="{DisplayAssignmentDetails>FieldLabel}" design="Bold"/>
+								</f:label>
+								<f:fields>
+									<VBox>
+										<items>
+											<Text
+												text="{parts:[{path:'DisplayAssignmentDetails>FieldName'},{path:'DisplayAssignmentDetails>FieldValue'},{path:'DisplayAssignmentDetails>FieldValueText'}],formatter:'.formatter.getTexts'}">
+												<!--<Text text="{path:'DisplayAssignmentDetails>FieldValue',type: 'sap.ui.model.type.Date', formatOptions: { style: 'full' }}"-->
+												<!--	visible="{= ${DisplayAssignmentDetails>FieldType} === 'D' ? true : false}"/>-->
+												<layoutData>
+													<l:GridData span="XL10 L12 M12 S12"/>
+												</layoutData>
+											</Text>
+										</items>
+									</VBox>
+								</f:fields>
+							</f:FormElement>
+						</f:formElements>
+					</f:FormContainer>
+				</f:Form>
+			</Panel>
+		</items>
+	</VBox>
+	<!--<f:Form layout="ResponsiveGridLayout" editable="false" formContainers="{path:'DisplayAssignmentDetails>/containers/',templateShareable:false}">-->
+	<!--<f:Form layout="ResponsiveGridLayout" editable="false">-->
+	<!--	<f:formContainers>-->
+	<!--		<f:FormContainer formElements="{path:'DisplayAssignmentDetails>form/',templateShareable:false}">-->
+	<!--			<f:formElements>-->
+	<!--				<f:FormElement label="{DisplayAssignmentDetails>FieldLabel}" visible="{= ${DisplayAssignmentDetails>Switch} ? false : true}">-->
+	<!--					<f:fields>-->
+	<!--						<Text-->
+	<!--							text="{parts:[{path:'DisplayAssignmentDetails>FieldName'},{path:'DisplayAssignmentDetails>FieldValue'},{path:'DisplayAssignmentDetails>FieldValueText'}],formatter:'.formatter.getTexts'}"/>-->
+	<!--<Text text="{path:'DisplayAssignmentDetails>FieldValue',type: 'sap.ui.model.type.Date', formatOptions: { style: 'full' }}"-->
+	<!--	visible="{= ${DisplayAssignmentDetails>FieldType} === 'D' ? true : false}"/>-->
+	<!--					</f:fields>-->
+	<!--				</f:FormElement>-->
+	<!--			</f:formElements>-->
+	<!--		</f:FormContainer>-->
+	<!--	</f:formContainers>-->
+	<!--</f:Form>-->
+</mvc:View>

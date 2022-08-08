@@ -1,0 +1,59 @@
+<!--
+
+    Copyright (C) 2009-2020 SAP SE or an SAP affiliate company. All rights reserved.
+
+-->
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form"
+	xmlns:u="sap.ui.unified" class="sapUiSizeCompact">
+	<Dialog title="{i18n>duplicateWeek}" contentWidth="60%" showHeader="true">
+		<l:VerticalLayout>
+			<Table growing="true" select="onOverviewSelect" growingThreshold="50" mode="None" headerText="{i18n>timeEntriesToBeDuplicate}"
+				items="{path:'TimeData>/', sorter: { path: 'TimeEntryDataFields/WORKDATE', descending: false }}" delete="onDelete"
+				enableBusyIndicator="true">
+				<columns>
+					<Column mergeDuplicates="true">
+						<Text text="{i18n>date}"/>
+					</Column>
+					<Column minScreenWidth="Tablet" demandPopin="true">
+						<Text text="{i18n>assign}"/>
+					</Column>
+					<Column minScreenWidth="Tablet" demandPopin="true">
+						<Text text="{i18n>hours}"/>
+					</Column>
+					<Column demandPopin="true" minScreenWidth="Tablet">
+						<Text text="{i18n>status}"/>
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem visible="{path: 'TimeData>TimeEntryDataFields/STATUS', formatter: '.formatterGetDuplicatetTaskEnabled' }">
+						<cells>
+							<Text text="{path: 'TimeData>TimeEntryDataFields/WORKDATE', type: 'sap.ui.model.type.Date', formatOptions: { style: 'full' }}"/>
+							<Text
+								text="{ parts: [{ path: 'TimeData>AssignmentName' }, { path: 'TimeData>AssignmentId' }, { path: 'TimeData>Counter' }, { path: 'TimeData>Status' }], formatter: '.formatterAssignmentName' }"/>
+							<Text text="{TimeData>TimeEntryDataFields/CATSHOURS} Hours"/>
+							<Text text="{ path: 'TimeData>TimeEntryDataFields/STATUS', formatter: '.formatterStatus' }"/>
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+			<l:DynamicSideContent sideContentPosition="Begin" class="sapUiDSCExplored sapUiContentPadding" containerQuery="true"
+				sideContentVisibility="AlwaysShow">
+				<l:sideContent class="sapUiResponsiveMargin" visible="{= ${device>/system/phone} ? false : true}">
+					<!--<u:CalendarDateInterval  days="7" select="handleDuplicateWeekCalendar" />-->
+					<FormattedText htmlText="{ path: 'i18n>selectWeekDuplicateTask', formatter: '.formatterFormatDuplicateText' }"></FormattedText>
+					<u:Calendar select="handleDuplicateWeekCalendar" minDate="{TimeEntries>/0/CaleNavMinDate}" maxDate="{TimeEntries>/0/CaleNavMaxDate}"
+						firstDayOfWeek="{path:'TimeEntries>/0/FirstDayOfWeek',formatter:'.dayOfWeek'}"/>
+				</l:sideContent>
+				<l:mainContent>
+					<List class="labelMarginLeft" noDataText="{i18n>noData}" headerText="{i18n>selectedWeek}"
+						items="{path: 'selectedDatesDupWeek>/selectedWeek/'}" mode="Delete" delete="onDelete">
+						<StandardListItem
+							title="{parts:[{path:'selectedDatesDupWeek>dateFrom',type: 'sap.ui.model.type.Date', formatOptions: { style: 'full' }},{path:'selectedDatesDupWeek>dateTo',type: 'sap.ui.model.type.Date', formatOptions: { style: 'full' }}],formatter:'.concatDates'}"/>
+					</List>
+				</l:mainContent>
+			</l:DynamicSideContent>
+		</l:VerticalLayout>
+		<beginButton><Button text="{i18n>duplicate}" enabled="{controls>/duplicateWeekButtonEnable}" press="handleConfirm"/></beginButton>
+		<endButton><Button text="{i18n>cancel}" press="handleCancel"/></endButton>
+	</Dialog>
+</core:FragmentDefinition>

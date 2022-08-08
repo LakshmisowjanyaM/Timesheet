@@ -1,0 +1,57 @@
+<!--
+
+    Copyright (C) 2009-2020 SAP SE or an SAP affiliate company. All rights reserved.
+
+-->
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="hcm.fab.mytimesheet.controller.createGroup"
+	xmlns:f="sap.ui.layout.form" xmlns:semantic="sap.m.semantic" xmlns:sf="sap.f" xmlns:l="sap.ui.layout" xmlns:u="sap.uxap"
+	xmlns:block="hcm.fab.mytimesheet.view.blocks" xmlns:bl="hcm.fab.mytimesheet.view.blocks" xmlns:html="http://www.w3.org/1999/xhtml">
+	<u:ObjectPageLayout id="GroupObjectPageLayout" enableLazyLoading="true" upperCaseAnchorBar="false"
+		showFooter="{= ${controls>/displayGroup} ? false : true}">
+		<u:headerTitle>
+			<u:ObjectPageHeader objectTitle="{Title>/Name}">
+				<u:actions>
+					<Button text="{i18n>edit}" type="Transparent" press="onGroupEdit" visible="{controls>/displayGroup}"/>
+					<Button text="{i18n>delete}" press="onGroupDeleteConfirm" visible="{= ${controls>/createGroup} ? false : true}"/>
+					<!--Allows you to add buttons to the create group page actions-->
+					<core:ExtensionPoint name="createGroupActionsExtension"/>
+				</u:actions>
+			</u:ObjectPageHeader>
+		</u:headerTitle>
+		<u:sections>
+			<u:ObjectPageSection title="{i18n>generalInformation}" titleUppercase="false">
+				<u:subSections>
+					<u:ObjectPageSubSection title="{i18n>generalInformation}" titleUppercase="false" mode="Expanded">
+						<u:blocks >
+							<bl:blockCreateGroupHeader id="createGroupHeaderBlock" visible="{= ${controls>/displayGroup} ? false : true}"/>
+							<bl:blockDisplayGroupHeader id="displayGroupHeaderBlock" visible="{= ${controls>/displayGroup} ? true : false}"/></u:blocks>
+					</u:ObjectPageSubSection>
+				</u:subSections>
+			</u:ObjectPageSection>
+			<u:ObjectPageSection id="detailSectionId" title="{i18n>assignmentsInGroup}" titleUppercase="false">
+				<u:subSections>
+					<u:ObjectPageSubSection title="{i18n>assignmentsInGroup}" titleUppercase="false" mode="Expanded">
+						<u:blocks>
+							<bl:blockCreateGroupDetails id="createGroupDetails"/>
+						</u:blocks>
+					</u:ObjectPageSubSection>
+				</u:subSections>
+			</u:ObjectPageSection>
+			<!--Allows you to add tab sections to the create group page-->
+			<core:ExtensionPoint name="createGroupTabSectionsExtension"/>
+		</u:sections>
+		<u:footer>
+			<OverflowToolbar>
+				<Button icon="sap-icon://message-popup" text="{message>/length}" type="Emphasized" visible="{= !!${message>/length}}"
+					tooltip="{i18n>messagePopup}" press="handleMessagePopover"/>
+				<ToolbarSpacer/>
+				<Button type="Emphasized" text="{i18n>save}" press="onSave" visible="{= ${controls>/displayGroup} ? false : true}"
+				enabled="{= ${controls>/createGroupSave} ? true : false}" />
+				<Button text="{i18n>cancel}" type="Transparent" press="onGroupCancel" visible="{controls>/GroupCancel}"/>
+				<Button text="{i18n>cancel}" type="Transparent" press="onCancel" visible="{controls>/displayGroupCancel}"/>
+				<!--Allows you to add buttons to the create group page footer bar-->
+				<core:ExtensionPoint name="createGroupFooterExtension"/>
+			</OverflowToolbar>
+		</u:footer>
+	</u:ObjectPageLayout>
+</mvc:View>

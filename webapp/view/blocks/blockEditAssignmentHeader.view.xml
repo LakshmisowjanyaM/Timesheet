@@ -1,0 +1,48 @@
+<!--
+
+    Copyright (C) 2009-2020 SAP SE or an SAP affiliate company. All rights reserved.
+
+-->
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:f="sap.ui.layout.form" xmlns:l="sap.ui.layout"
+	controllerName="hcm.fab.mytimesheet.controller.blockCommon">
+	<f:Form editable="true">
+		<f:layout>
+			<f:ResponsiveGridLayout columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="true"/>
+		</f:layout>
+		<f:formContainers>
+			<f:FormContainer id="EDITFORM_HEADER" title="">
+				<f:formElements>
+					<f:FormElement label="{i18n>name}">
+						<f:fields>
+							<Input required="true" value="{EditedTask1>/name}" width="{= ${device>/system/phone} ? '' : '88%'}"
+								valueState="{EditedTask1>/assignmentNameError}" maxLength="30" valueStateText="{EditedTask1>/assignmentNameErrorText}"
+								id="focusEditformHeader">
+								<layoutData>
+									<l:GridData span="XL11 L10 M12 S12"/>
+								</layoutData>
+							</Input>
+						</f:fields>
+					</f:FormElement>
+					<f:FormElement label="{i18n>validPeriod}">
+						<DateRangeSelection required="true" width="{= ${device>/system/phone} ? '' : '88%'}" dateValue="{EditedTask1>/validFrom}"
+							valueState="{EditedTask1>/assignmentValidityError}" valueStateText="{EditedTask1>/assignmentValidityErrorText}"
+							secondDateValue="{EditedTask1>/validTo}" change="handleDateRangeChange" navigate="changeFirstDayOfWeek">
+							<layoutData>
+								<l:GridData span="XL11 L10 M12 S12"/>
+							</layoutData>
+						</DateRangeSelection>
+					</f:FormElement>
+					<f:FormElement label="{i18n>status}">
+						<f:fields>
+							<Switch state="{EditedTask1>/status}" tooltip="{path:'EditedTask1>/status',formatter:'.formatter.switchStateText'}" type="AcceptReject">
+								<layoutData>
+									<l:GridData span="XL12 L12 M12 S12"/>
+								</layoutData>
+							</Switch>
+						</f:fields>
+					</f:FormElement>
+				</f:formElements>
+			</f:FormContainer>
+		</f:formContainers>
+	</f:Form>
+</mvc:View>

@@ -1,0 +1,26 @@
+<!--
+
+    Copyright (C) 2009-2020 SAP SE or an SAP affiliate company. All rights reserved.
+
+-->
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout" class="sapUiSizeCompact">
+	<!--<Popover showHeader="true" placement="Bottom" contentWidth="320px"  title="{i18n>comments}">-->
+	<!--	<footer>-->
+	<!--		<Toolbar>-->
+	<!--			<ToolbarSpacer/>-->
+	<!--			<Button text="{i18n>close}" press="handleClose"/>-->
+	<!--		</Toolbar>-->
+	<!--	</footer>-->
+	<!--	<content>-->
+	<!--	<Panel><Text text="{TimeData>TimeEntryDataFields/LTXA1}"/></Panel>-->
+	<!--	</content>-->
+	<!--</Popover>-->
+	<QuickView >
+		<QuickViewPage header="{i18n>comments}">
+			<QuickViewGroup>
+				<QuickViewGroupElement
+					value="{parts:[{path:'TimeData>TimeEntryDataFields/LONGTEXT_DATA'},{path:'TimeData>RejReasondesc'}],formatter:'.commentDisplay'}"></QuickViewGroupElement>
+			</QuickViewGroup>
+		</QuickViewPage>
+	</QuickView>
+</core:FragmentDefinition>

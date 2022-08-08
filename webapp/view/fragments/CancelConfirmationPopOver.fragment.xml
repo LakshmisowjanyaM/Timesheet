@@ -1,0 +1,25 @@
+<!--
+
+    Copyright (C) 2009-2020 SAP SE or an SAP affiliate company. All rights reserved.
+
+-->
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form">
+	<Popover placement="Auto" showHeader="false" afterClose="handleClose">
+		<f:Form layout="ResponsiveGridLayout">
+			<f:layout>
+				<f:ResponsiveGridLayout labelSpanXL="6" labelSpanL="6" labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
+					emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="false"/>
+			</f:layout>
+			<f:formContainers>
+				<f:FormContainer>
+					<f:FormElement>
+						<Label text="{i18n>discardChanges}"></Label>
+					</f:FormElement>
+					<f:FormElement >
+						<Button text="{i18n>discard}" width="100%" press="handleConfirmationDiscard"></Button>
+					</f:FormElement>
+				</f:FormContainer>
+			</f:formContainers>
+		</f:Form>
+	</Popover>
+</core:FragmentDefinition>

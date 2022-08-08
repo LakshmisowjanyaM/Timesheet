@@ -1,0 +1,64 @@
+<!--
+
+    Copyright (C) 2009-2020 SAP SE or an SAP affiliate company. All rights reserved.
+
+-->
+<core:FragmentDefinition xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:f="sap.ui.layout.form"
+	xmlns:l="sap.ui.layout">
+	<Dialog title="{i18n>saveAssignment}" class="sapUiPopupWithPadding" contentWidth="40%" stretch="{= ${device>/system/phone} ? true : false}">
+		<beginButton>
+			<Button id="saveAssignment" text="{i18n>save}" press="saveAdHocAssignment"/>
+		</beginButton>
+		<endButton>
+			<Button text="{i18n>cancel}" press="handleClose"/>
+		</endButton>
+		<content>
+			<VBox>
+				<f:Form editable="true">
+					<f:layout>
+						<f:ColumnLayout columnsL="1" columnsM="1" columnsS="1"/>
+					</f:layout>
+					<f:formContainers>
+						<f:FormContainer>
+							<f:formElements>
+								<f:FormElement label="{i18n>assignmentNameAdHoc}">
+									<f:fields>
+										<Input maxLength="30" liveChange="validateInput" required="true" value="{adHocSaveAssignmentModel>/assignmentName}"
+											valueState="{adHocSaveAssignmentModel>/assignmentNameError}" valueStateText="{adHocSaveAssignmentModel>/assignmentNameErrorText}">
+											<layoutData>
+												<f:ColumnElementData cellsSmall="10" cellsLarge="6"/>
+											</layoutData>
+										</Input>
+									</f:fields>
+								</f:FormElement>
+								<f:FormElement label="{i18n>validPeriod}" class="sapUiSmallMarginTop">
+									<f:fields>
+										<DateRangeSelection valueState="{adHocSaveAssignmentModel>/assignmentValidityError}"
+											valueStateText="{adHocSaveAssignmentModel>/assignmentValidityErrorText}" change="validateDatePicker" required="true"
+											dateValue="{adHocSaveAssignmentModel>/validFrom}" secondDateValue="{adHocSaveAssignmentModel>/validTo}">
+											<layoutData>
+												<f:ColumnElementData cellsSmall="10" cellsLarge="6"/>
+											</layoutData>
+										</DateRangeSelection>
+									</f:fields>
+								</f:FormElement>
+								<f:FormElement class="sapUiSmallMarginTop">
+									<f:label>
+										<Label text="{i18n>status}"></Label>
+									</f:label>
+									<f:fields>
+										<Switch state="{adHocSaveAssignmentModel>/status}">
+											<layoutData>
+												<f:ColumnElementData cellsSmall="10" cellsLarge="6"/>
+											</layoutData>
+										</Switch>
+									</f:fields>
+								</f:FormElement>
+							</f:formElements>
+						</f:FormContainer>
+					</f:formContainers>
+				</f:Form>
+			</VBox>
+		</content>
+	</Dialog>
+</core:FragmentDefinition>

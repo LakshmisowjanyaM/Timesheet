@@ -1,0 +1,98 @@
+<!--
+
+    Copyright (C) 2009-2020 SAP SE or an SAP affiliate company. All rights reserved.
+
+-->
+<mvc:View xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" xmlns:f="sap.ui.layout.form" xmlns:core="sap.ui.core" xmlns:semantic="sap.m.semantic"
+	xmlns:sf="sap.f" xmlns:l="sap.ui.layout" controllerName="hcm.fab.mytimesheet.controller.EditToDoMobile"
+	xmlns:html="http://www.w3.org/1999/xhtml">
+	<sf:DynamicPage id="dynamicPageId" headerExpanded="true" toggleHeaderOnTitleClick="true" showFooter="true">
+		<!-- DynamicPage Title -->
+		<sf:title>
+			<sf:DynamicPageTitle>
+				<sf:heading>
+					<Title text="{path: 'EditTodo>/TimeEntryDataFields/WORKDATE', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'EEE,MMM d' }}"/>
+				</sf:heading>
+				<sf:actions>
+					<!--<Button text="{i18n>edit}" type="Emphasized" press="onEditAssignment" visible="{= ${controls>/displayAssignment} ? true : false}"/>-->
+				</sf:actions>
+			</sf:DynamicPageTitle>
+		</sf:title>
+		<sf:header>
+			<sf:DynamicPageHeader pinnable="true">
+				<sf:content>
+					<!--<ObjectIdentifier text="{parts:[{path:'EditTodo>/target'},{path:'EditTodo>/totalHours'}], formatter:'.formatter.mobconcatStrings'}"-->
+					<!--	visible="{= ${device>/system/phone} ? true : false}"/>-->
+					<ToolbarSpacer/>
+				</sf:content>
+			</sf:DynamicPageHeader>
+		</sf:header>
+		<sf:content>
+			<VBox class="sapUiSmallMargin">
+				<f:Form id="EditTodoForm" editable="true">
+					<f:layout>
+						<f:ResponsiveGridLayout labelSpanL="3" labelSpanM="3" emptySpanL="4" emptySpanM="4" columnsL="1" columnsM="1"/>
+					</f:layout>
+					<f:formContainers>
+						<f:FormContainer>
+							<f:formElements>
+								<f:FormElement>
+									<f:fields>
+										<Title text="{path: 'EditTodo>/TimeEntryDataFields/WORKDATE', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'EEE,MMM d' }}"/>
+									</f:fields>
+								</f:FormElement>
+								<f:FormElement label="{i18n>entered}">
+									<f:fields>
+										<ObjectStatus text="{parts:[{path:'EditTodo>/total'},{path:'EditTodo>/target'}], formatter:'.formatter.concatStrings'}"
+											state="{path:'EditTodo>/TimeEntryDataFields/STATUS', formatter:'.formatter.TodoState'}"/>
+									</f:fields>
+								</f:FormElement>
+								<f:FormElement label="{i18n>assign}">
+									<f:fields>
+										<ComboBox items="{Tasks>/}" selectedKey="{EditTodo>/AssignmentId}" selectionChange="onSelectionChange">
+											<core:Item key="{Tasks>AssignmentId}" enabled="{ path: 'Tasks>AssignmentStatus', formatter: '.formatter.activeTasks' }"
+												text="{Tasks>AssignmentName}"/>
+										</ComboBox>
+									</f:fields>
+								</f:FormElement>
+								<f:FormElement label="{i18n>hours}">
+									<f:fields>
+										<Input value="{EditTodo>/TimeEntryDataFields/CATSHOURS}" type="Number"
+											description="{ parts: [{ path: 'EditTodo>/TimeEntryDataFields/UNIT' }, { path: 'EditTodo>/TimeEntryDataFields/CATSHOURS' }], formatter: '.formatter.getUnitTexts' }"/>
+									</f:fields>
+								</f:FormElement>
+								<f:FormElement label="{i18n>startTime}">
+									<f:fields>
+										<TimePicker value=" { path: 'EditTodo>/TimeEntryDataFields/BEGUZ', formatter: '.formatter.formatTime' }" valueFormat="HH:mm"
+											displayFormat="HH:mm" change="startTimeChange" placeholder="{i18n>startTime}"/>
+									</f:fields>
+								</f:FormElement>
+								<f:FormElement label="{i18n>endTime}">
+									<f:fields>
+										<TimePicker value=" { path: 'EditTodo>/TimeEntryDataFields/ENDUZ', formatter: '.formatter.formatTime' }" valueFormat="HH:mm"
+											displayFormat="HH:mm" change="stopTimeChange" placeholder="{i18n>endTime}"/>
+									</f:fields>
+								</f:FormElement>
+								<f:FormElement label="{i18n>note}">
+									<f:fields>
+										<TextArea value="{EditTodo>/TimeEntryDataFields/LONGTEXT_DATA}" liveChange="handleLongText"/>
+									</f:fields>
+								</f:FormElement>
+							</f:formElements>
+						</f:FormContainer>
+					</f:formContainers>
+				</f:Form>
+			</VBox>
+		</sf:content>
+		<sf:footer>
+			<OverflowToolbar>
+				<Button id="messageList" icon="sap-icon://message-popup" text="{/messagesLength}" visible="{= !!${/messagesLength}}"
+					tooltip="{i18n>messagePopup}" press="handleMessagePopover"/>
+				<ToolbarSpacer/>
+				<Button type="Emphasized" text="{i18n>sendForApproval}" tooltip="{i18n>sendForApproval}" press="onToDoSubmit"/>
+				<Button text="{i18n>cancel}" tooltip="{i18n>cancel}" type="Transparent" press="onCancel" visible="{= ${controls>/displayAssignmentCancel} ? false : true}"/>
+				<!--<Button text="{i18n>cancel}" type="Transparent" press="onDisplayCancel" visible="{= ${controls>/displayAssignmentCancel} ? true : false}"/>-->
+			</OverflowToolbar>
+		</sf:footer>
+	</sf:DynamicPage>
+</mvc:View>

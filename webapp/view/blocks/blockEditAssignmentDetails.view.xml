@@ -1,0 +1,90 @@
+<!--
+
+    Copyright (C) 2009-2020 SAP SE or an SAP affiliate company. All rights reserved.
+
+-->
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:f="sap.ui.layout.form" xmlns:l="sap.ui.layout"
+	controllerName="hcm.fab.mytimesheet.controller.blockCommon">
+	<VBox items="{EditedTask1>/fields/}">
+		<items>
+			<Panel visible="{=${EditedTask1>visible} === 'false'? false : true}">
+				<headerToolbar>
+					<Toolbar >
+						<Title level="H2" text="{EditedTask1>GroupName}"/>
+						<Button icon="sap-icon://message-information" press="getCustomData" visible="{= ${EditedTask1>GroupName} === '' ? false : true}">
+							<customData>
+								<core:CustomData key="GroupPosition" value="{EditedTask1>GroupPosition}"></core:CustomData>
+							</customData>
+						</Button>
+					</Toolbar>
+				</headerToolbar>
+				<f:Form id="EDITFORM_FIELDS" editable="true" formContainers="{path:'EditedTask1>containers/',templateShareable:false}">
+					<f:layout>
+						<!--<l:BlockBaseColumnLayout/>-->
+						<f:ResponsiveGridLayout columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="false"/>
+					</f:layout>
+					<!--<f:formContainers>-->
+					<f:FormContainer formElements="{path:'EditedTask1>form/',templateShareable:false}">
+						<f:formElements>
+							<!--<core:CustomData key="FieldName" value="{ProfileFields>FieldName}"></core:CustomData>-->
+							<f:FormElement visible="{= ${EditedTask1>Switch} ? false : true}">
+								<f:label>
+									<Label wrapping="true" text="{EditedTask1>FieldLabel}" design="Bold" tooltip="{EditedTask1>FieldLabel}"
+										required="{parts:[{path:'EditedTask1>IsReadOnly'},{path:'EditedTask1>DefaultValue'},{path: 'EditedTask1>Required'}],formatter:'.formatter.getRequiredField'}"></Label>
+								</f:label>
+								<f:fields>
+									<VBox width="{= ${device>/system/phone} ? '100%' : '65%'}">
+										<items>
+											<Input value="{EditedTask1>FieldValue}" valueState="{EditedTask1>valueState}" valueStateText="{EditedTask1>valueStateText}"
+												maxLength="{parts:[{path:'EditedTask1>FieldLength'},{path:'EditedTask1>FieldType'}],formatter:'.formatter.fieldLength'}"
+												type="{path:'EditedTask1>FieldType',formatter:'.formatter.typeKind'}" showValueHelp="{= ${EditedTask1>HasF4} === 'X' ? true : false}"
+												valueHelpOnly="{= ${EditedTask1>HasF4} === 'X' ? true : false}" valueHelpRequest="onValueHelp"
+												visible="{= ${EditedTask1>FieldType} === 'C' || ${EditedTask1>FieldType} === 'N' || ${EditedTask1>FieldType} === 'P' ? true : false}"
+												enabled="{=${EditedTask1>IsReadOnly} === 'TRUE'? false:true}" placeholder="{EditedTask1>InlineHelp}"
+												tooltip="{parts:[{path:'EditedTask1>FieldName'},{path:'EditedTask1>FieldValue'},{path:'EditedTask1>FieldValueText'}],formatter:'.formatter.getTexts'}">
+												<layoutData>
+													<l:GridData span="XL10 L12 M12 S12"/>
+												</layoutData>
+												<customData>
+													<core:CustomData key="FieldName" value="{EditedTask1>FieldName}"></core:CustomData>
+												</customData>
+												<customData>
+													<core:CustomData key="AssignmentId" value="{EditedTask1>AssignmentId}"></core:CustomData>
+												</customData>
+												<customData>
+													<core:CustomData key="FieldLabel" value="{EditedTask1>FieldLabel}"></core:CustomData>
+												</customData>
+											</Input>
+											<FormattedText
+												htmlText="{parts:[{path:'EditedTask1>FieldName'},{path:'EditedTask1>FieldValue'},{path:'EditedTask1>FieldValueText'}],formatter:'.formatter.getFormattedTexts'}"
+												visible="{= ${EditedTask1>FieldType} === 'C' || ${EditedTask1>FieldType} === 'N' || ${EditedTask1>FieldType} === 'P' ? true : false}"
+												class="sapUiTinyMarginBegin">
+												<layoutData>
+													<l:GridData span="XL9 L6 M12 S12"/>
+												</layoutData>
+											</FormattedText>
+											<DatePicker value="{parts:[{path:'EditedTask1>FieldValue'},{path:'EditedTask1>FieldType'}],formatter:'.formatter.isDate'}"
+												visible="{= ${EditedTask1>FieldType} === 'D' ? true : false}" placeholder="{EditedTask1>InlineHelp}">
+												<layoutData>
+													<l:GridData span="XL10 L6 M12 S12"/>
+												</layoutData>
+											</DatePicker>
+											<TimePicker width="100%" value="{EditedTask1>FieldValue}" valueState="{EditedTask1>valueState}"
+												valueStateText="{EditedTask1>valueStateText}" visible="{= ${EditedTask1>FieldType} === 'T' ? true : false}"
+												displayFormat="{parts:[{path:'EditedTask1>FieldName'}],formatter:'.formatter.getValueFormatTimePicker'}" valueFormat="HH:mm">
+												<layoutData>
+													<l:GridData span="XL12 L6 M12 S12"/>
+												</layoutData>
+											</TimePicker>
+										</items>
+									</VBox>
+								</f:fields>
+							</f:FormElement>
+						</f:formElements>
+					</f:FormContainer>
+					<!--</f:formContainers>-->
+				</f:Form>
+			</Panel>
+		</items>
+	</VBox>
+</mvc:View>

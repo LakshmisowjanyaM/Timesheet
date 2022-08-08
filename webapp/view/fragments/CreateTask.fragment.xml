@@ -1,0 +1,85 @@
+<!--
+
+    Copyright (C) 2009-2020 SAP SE or an SAP affiliate company. All rights reserved.
+
+-->
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:core="sap.ui.core">
+	<VBox  class="sapUiSmallMargin">
+		<f:Form 
+			editable="false">
+			<f:title>
+				<core:Title text="{i18n>header}"/>
+			</f:title>
+			<f:layout>
+				<f:ResponsiveGridLayout
+					labelSpanXL="4"
+					labelSpanL="4"
+					labelSpanM="12"
+					labelSpanS="12"
+					adjustLabelSpan="false"
+					emptySpanXL="0"
+					emptySpanL="0"
+					emptySpanM="0"
+					emptySpanS="0"
+					columnsXL="2"
+					columnsL="2"
+					columnsM="1"
+					singleContainerFullSize="false" />
+			</f:layout>
+			<f:formContainers>
+				<f:FormContainer title="">
+					<f:formElements>
+						<f:FormElement label="{i18n>name}">
+							<f:fields>
+								<Text text="{EditedTask>/name}" />
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="{i18n>status}">
+							<f:fields>
+								<ObjectStatus text="{path:'EditedTask>/status', formatter:'.formatter.assignmentstatus'}" state="{path:'EditedTask>/status', formatter:'.formatter.assignmentState'}"/>
+							</f:fields>
+						</f:FormElement>
+					</f:formElements>
+				</f:FormContainer>
+			</f:formContainers>
+		</f:Form>
+		<f:Form 
+			editable="false" formContainers="{path:'EditedTask>/containers/',templateShareable:false}">
+			<f:title>
+				<core:Title text="{i18n>details}" />
+			</f:title>
+			<f:layout>
+				<f:ResponsiveGridLayout
+					labelSpanXL="4"
+					labelSpanL="4"
+					labelSpanM="12"
+					labelSpanS="12"
+					adjustLabelSpan="false"
+					emptySpanXL="0"
+					emptySpanL="0"
+					emptySpanM="0"
+					emptySpanS="0"
+					columnsXL="2"
+					columnsL="2"
+					columnsM="1"
+					singleContainerFullSize="false" />
+			</f:layout>
+			<f:formContainers>
+						<f:FormContainer formElements="{path:'EditedTask>form/',templateShareable:false}">
+							<f:formElements>
+								<!--<core:CustomData key="FieldName" value="{ProfileFields>FieldName}"></core:CustomData>-->
+								<f:FormElement label="{EditedTask>FieldLabel}" visible="{= ${EditedTask>Switch} ? false : true}">
+									<f:fields>
+										<Text  text = "{parts:[{path:'EditedTask>FieldName'},{path:'EditedTask>FieldValue'}],formatter:'.formatter.getTexts'}"/>
+									</f:fields>
+								</f:FormElement>
+							</f:formElements>
+						</f:FormContainer>
+			</f:formContainers>
+		</f:Form>		
+	</VBox>
+</core:FragmentDefinition>

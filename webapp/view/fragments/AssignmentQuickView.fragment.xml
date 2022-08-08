@@ -1,0 +1,42 @@
+<!--
+
+    Copyright (C) 2009-2020 SAP SE or an SAP affiliate company. All rights reserved.
+
+-->
+<!--<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout" class="sapUiSizeCompact">-->
+<!--	<QuickView>-->
+<!--		<pages>-->
+<!--			<QuickViewPage class="sapUiNoMarginBottom sapUiNoMarginTop" header="{i18n>assign}" groups='{AssignmentGrouping>/}'>-->
+<!--				<QuickViewGroup class="sapUiNoMarginBottom sapUiNoMarginTop" heading=" {AssignmentGrouping>GroupName}"-->
+<!--					elements="{ path : 'AssignmentGrouping>groupData/', templateShareable : 'true'}">-->
+<!--					<QuickViewGroupElement class="sapUiNoMarginBottom sapUiNoMarginTop" label="{AssignmentGrouping>label}" value="{AssignmentGrouping>value}"-->
+<!--						type="text"></QuickViewGroupElement>-->
+<!--				</QuickViewGroup>-->
+<!--			</QuickViewPage>-->
+<!--		</pages>-->
+<!--	</QuickView>-->
+<!--</core:FragmentDefinition>-->
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout" class="sapUiSizeCompact">
+	<ResponsivePopover resizable="true" contentWidth="17%">
+		<endButton>
+			<Button text="{i18n>cancel}" press="handleClose"/>
+		</endButton>
+		<customHeader>
+			<Toolbar>
+				<VBox width="100%" alignItems="Center" alignContent="Center" class="sapUiNoContentPadding sapUiTinyMarginTop">
+					<Label text="{i18n>assign}" design="Bold"></Label>
+				</VBox>
+			</Toolbar>
+		</customHeader>
+		<content>
+			<VBox items='{AssignmentGrouping>/}'>
+				<Panel headerText="{AssignmentGrouping>GroupName}" content="{ path : 'AssignmentGrouping>groupData/', templateShareable : 'true'}">
+					<VBox>
+						<Label class="sapUiTinyMarginTop" text="{path:'AssignmentGrouping>label'}" design="Bold"/>
+						<Text text="{AssignmentGrouping>value}"/>
+					</VBox>
+				</Panel>
+			</VBox>
+		</content>
+	</ResponsivePopover>
+</core:FragmentDefinition>

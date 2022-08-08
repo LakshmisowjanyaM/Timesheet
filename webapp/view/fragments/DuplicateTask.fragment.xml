@@ -1,0 +1,95 @@
+<!--
+
+    Copyright (C) 2009-2020 SAP SE or an SAP affiliate company. All rights reserved.
+
+-->
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form"
+	xmlns:u="sap.ui.unified">
+	<Dialog title="{i18n>duplicateTimeEntry}" stretch="{= ${device>/system/phone} ? true : false}"
+		contentWidth="{= ${device>/system/phone} ? '' : '60%'}" showHeader="true" type="Standard">
+		<!--<P13nDialog title="{i18n>duplicateAssignment}" showHeader="true" cancel="handleCancel" ok="handleConfirm">-->
+		<!--<Table growing="true" select="onOverviewSelect" growingThreshold="50" delete="onDelete" enableBusyIndicator="true" items="{TimeDataDuplicateTask>/}">-->
+		<!--    <columns>-->
+		<!--        <Column demandPopin="true" width="19.5%">-->
+		<!--            <Text text="{i18n>assignmen}"/>-->
+		<!--        </Column>-->
+		<!--        <Column minScreenWidth="Tablet" width="15%" demandPopin="true">-->
+		<!--            <Text text="{i18n>hours}"/>-->
+		<!--        </Column>-->
+		<!--    </columns>-->
+		<!--    <items>-->
+		<!--        <ColumnListItem>-->
+		<!--            <cells>-->
+		<!--                <ObjectIdentifier title="{TimeDataDuplicateTask>AssignmentName}"/>-->
+		<!--<l:HorizontalLayout><Label text="{TimeData>TimeEntryDataFields/CATSHOURS}"/><Text text=" "></Text> <Label text="Hours"/></l:HorizontalLayout>-->
+		<!--                <Text text="{TimeDataDuplicateTask>TimeEntryDataFields/CATSHOURS} Hours"/>-->
+		<!--            </cells>-->
+		<!--        </ColumnListItem>-->
+		<!--    </items>-->
+		<!--</Table>-->
+		<!--<Page>-->
+		<content>
+			<!--<l:VerticalLayout>-->
+			<Table growing="true" select="onOverviewSelect" growingThreshold="50" mode="MultiSelect" headerText="{i18n>selectTimeEntriesToBeDuplicate}"
+				items="{path:'TimeData>/', sorter: { path: 'TimeEntryDataFields/WORKDATE', descending: false }}" delete="onDelete"
+				enableBusyIndicator="true">
+				<columns>
+					<Column mergeDuplicates="true" demandPopin="true">
+						<Text text="{i18n>date}"/>
+					</Column>
+					<Column demandPopin="true" minScreenWidth="Tablet">
+						<Text text="{i18n>assign}"/>
+					</Column>
+					<Column demandPopin="true" minScreenWidth="Tablet">
+						<Text text="{i18n>enteredColumn}"/>
+					</Column>
+					<Column demandPopin="true" minScreenWidth="Tablet">
+						<Text text="{i18n>status}"/>
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem visible="{path: 'TimeData>TimeEntryDataFields/STATUS', formatter: '.formatterGetDuplicatetTaskEnabled' }">
+						<cells >
+							<Text text="{path: 'TimeData>TimeEntryDataFields/WORKDATE', type: 'sap.ui.model.type.Date', formatOptions: { style: 'full' }}"/>
+							<Text
+								text="{ parts: [{ path: 'TimeData>AssignmentName' }, { path: 'TimeData>AssignmentId' }, { path: 'TimeData>Counter' }, { path: 'TimeData>Status' }], formatter: '.formatterAssignmentName' }"/>
+							<Text text="{TimeData>TimeEntryDataFields/CATSHOURS}"/>
+							<Text text="{ path: 'TimeData>TimeEntryDataFields/STATUS', formatter: '.formatterStatus' }"/>
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+			<VBox visible="{= ${device>/system/phone} ? true : false}">
+				<FormattedText
+					htmlText="{ parts:[{path: 'i18n>selectDaysDuplicateTask'}, {path:'device>/system/phone'}], formatter: '.formatterFormatDuplicateText' }"></FormattedText>
+				<u:Calendar id="mDuplicateCalendar" select="onSelect" intervalSelection="false" singleSelection="false"
+					minDate="{TimeEntries>/0/CaleNavMinDate}" maxDate="{TimeEntries>/0/CaleNavMaxDate}"
+					firstDayOfWeek="{path:'TimeEntries>/0/FirstDayOfWeek',formatter:'.dayOfWeek'}"/>
+				<List class="labelMarginLeft" noDataText="{i18n>noData}" headerText="{i18n>selectedDates}" mode="Delete" delete="onDelete"
+					items="{path: 'selectedDatesDup>/selectedDates/'}">
+					<StandardListItem title="{path:'selectedDatesDup>Date', type: 'sap.ui.model.type.Date', formatOptions: { style: 'full' }}"/>
+				</List>
+			</VBox>
+			<l:DynamicSideContent sideContentPosition="Begin" class="sapUiDSCExplored sapUiContentPadding" containerQuery="true"
+				visible="{= ${device>/system/phone} ? false : true}" sideContentVisibility="AlwaysShow">
+				<l:sideContent class="sapUiResponsiveMargin">
+					<FormattedText htmlText="{ path: 'i18n>selectDaysDuplicateTask', formatter: '.formatterFormatDuplicateText' }"></FormattedText>
+					<u:Calendar id="duplicateCalendar" select="onSelect" intervalSelection="false" singleSelection="false"
+						minDate="{TimeEntries>/0/CaleNavMinDate}" maxDate="{TimeEntries>/0/CaleNavMaxDate}"
+						firstDayOfWeek="{path:'TimeEntries>/0/FirstDayOfWeek',formatter:'.dayOfWeek'}"></u:Calendar>
+				</l:sideContent>
+				<l:mainContent>
+					<List class="labelMarginLeft" noDataText="{i18n>noData}" headerText="{i18n>selectedDates}" mode="Delete" delete="onDelete"
+						items="{path: 'selectedDatesDup>/selectedDates/'}">
+						<StandardListItem title="{path:'selectedDatesDup>Date', type: 'sap.ui.model.type.Date', formatOptions: { style: 'full'}}"/>
+					</List>
+				</l:mainContent>
+			</l:DynamicSideContent>
+			<!--</l:VerticalLayout>-->
+		</content>
+		<!--</Page>-->
+		<beginButton><Button text="{i18n>duplicate}" enabled="{controls>/duplicateTaskButtonEnable}" press="handleConfirm"/></beginButton>
+		<endButton><Button text="{i18n>cancel}" press="handleCancel"/></endButton>
+	</Dialog>
+	<!--</P13nDialog>-->
+</core:FragmentDefinition>

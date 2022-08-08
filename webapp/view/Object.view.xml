@@ -1,0 +1,182 @@
+<!--
+
+    Copyright (C) 2009-2020 SAP SE or an SAP affiliate company. All rights reserved.
+
+-->
+<mvc:View controllerName="hcm.fab.mytimesheet.controller.Object" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" xmlns:f="sap.ui.layout.form"
+	xmlns:core="sap.ui.core" xmlns:semantic="sap.m.semantic" xmlns:sf="sap.f" xmlns:l="sap.ui.layout">
+	<sf:DynamicPage id="dynamicPageId" headerExpanded="true" toggleHeaderOnTitleClick="true"
+		showFooter="{= ${controls>/displayAssignment} ? false : true}">
+		<!-- DynamicPage Title -->
+		<sf:title>
+			<sf:DynamicPageTitle>
+				<sf:heading>
+					<Title text="{controls>/assignmentTitle}"/>
+				</sf:heading>
+				<sf:actions>
+					<Button text="{i18n>edit}" type="Emphasized" press="onEditAssignment" visible="{= ${controls>/displayAssignment} ? true : false}"/>
+				</sf:actions>
+			</sf:DynamicPageTitle>
+		</sf:title>
+		<!-- DynamicPage Header -->
+		<sf:header>
+			<sf:DynamicPageHeader pinnable="true">
+				<sf:content></sf:content>
+			</sf:DynamicPageHeader>
+		</sf:header>
+		<sf:content>
+			<!--<Page navButtonPress="onNavBack">-->
+			<!--	<content>-->
+			<!--		<ObjectHeader title="{controls>/assignmentTitle}" backgroundDesign="Solid"/>-->
+			<VBox class="sapUiSmallMargin">
+				<f:Form id="createForm" visible="{controls>/createAssignment}">
+					<f:layout>
+						<f:ResponsiveGridLayout labelSpanL="3" labelSpanM="3" emptySpanL="4" emptySpanM="4" columnsL="1" columnsM="1"/>
+					</f:layout>
+					<f:formContainers>
+						<f:FormContainer id="FORM_FIELDS" formElements="{ProfileFields>/}">
+							<f:formElements>
+								<!--<core:CustomData key="FieldName" value="{ProfileFields>FieldName}"></core:CustomData>-->
+								<f:FormElement label="{ProfileFields>FieldLabel}">
+									<f:fields>
+										<Input  showValueHelp="{= ${ProfileFields>hasF4} ? false : true}" valueHelpOnly="{= ${ProfileFields>hasF4} ? false : true}" valueHelpRequest="onValueHelp"  visible="{= ${ProfileFields>Switch} ? false : true}">
+											<customData>
+												<core:CustomData key="FieldName" value="{ProfileFields>FieldName}"></core:CustomData>
+											</customData>
+											<customData>
+												<core:CustomData key="AssignmentId" value="{EditedTask>AssignmentId}"></core:CustomData>
+											</customData>											
+											<customData>
+												<core:CustomData key="FieldLabel" value="{ProfileFields>FieldLabel}"></core:CustomData>
+											</customData>
+										</Input>
+										<Switch state="true" type="AcceptReject" enabled="true" visible="{= ${ProfileFields>Switch} ? true : false}"/>
+										<!--<core:CustomData key="FieldName" value="{ProfileFields>FieldName}"/>-->
+									</f:fields>
+								</f:FormElement>
+							</f:formElements>
+						</f:FormContainer>
+					</f:formContainers>
+				</f:Form>
+				<f:Form id="EditForm" formContainers="" visible="{controls>/editAssignment}" editable="{= ${controls>/displayAssignment} ? false : true}">
+					<f:layout>
+						<f:ResponsiveGridLayout labelSpanL="3" labelSpanM="3" emptySpanL="4" emptySpanM="4" columnsL="1" columnsM="1"/>
+					</f:layout>
+					<f:formContainers>
+						<f:FormContainer id="EDITFORM_FIELDS" formElements="{EditedTask>/}">
+							<f:formElements>
+								<!--<core:CustomData key="FieldName" value="{ProfileFields>FieldName}"></core:CustomData>-->
+								<f:FormElement label="{EditedTask>FieldLabel}">
+									<f:fields>
+										<Input showValueHelp="true" value="{EditedTask>FieldValue}" valueHelpOnly="false" valueHelpRequest="onValueHelp"
+											visible="{= ${EditedTask>Switch} ? false : true}" enabled="{= ${controls>/displayAssignment} ? false : true}">
+											<customData>
+												<core:CustomData key="FieldName" value="{EditedTask>FieldName}"></core:CustomData>
+											</customData>
+											<customData>
+												<core:CustomData key="AssignmentId" value="{EditedTask>AssignmentId}"></core:CustomData>
+											</customData>
+											<customData>
+												<core:CustomData key="FieldLabel" value="{EditedTask>FieldLabel}"></core:CustomData>
+											</customData>
+										</Input>
+										<Switch state="{path:'EditedTask>FieldValue', formatter:'.formatter.switchState'}" type="AcceptReject"
+											enabled="{= ${controls>/displayAssignment} ? false : true}" visible="{= ${EditedTask>Switch} ? true : false}"/>
+									</f:fields>
+								</f:FormElement>
+							</f:formElements>
+						</f:FormContainer>
+					</f:formContainers>
+				</f:Form>
+				<!--<f:Form id="DisplayForm" visible="{controls>/displayAssignment}">-->
+				<!--	<f:layout>-->
+				<!--		<f:ResponsiveGridLayout labelSpanL="3" labelSpanM="3" emptySpanL="4" emptySpanM="4" columnsL="1" columnsM="1"/>-->
+				<!--	</f:layout>-->
+				<!--	<f:formContainers>-->
+				<!--		<f:FormContainer  id="DISPLAYFORM_FIELDS" formElements="{EditedTask>/}" >-->
+				<!--			<f:formElements>-->
+				<!--<core:CustomData key="FieldName" value="{ProfileFields>FieldName}"></core:CustomData>-->
+				<!--				<f:FormElement label="{EditedTask>FieldLabel}">-->
+				<!--					<f:fields>-->
+				<!--						<Text  text="{EditedTask>FieldValue}"-->
+				<!--							visible="{= ${EditedTask>Switch} ? false : true}">-->
+				<!--							<customData>-->
+				<!--								<core:CustomData key="FieldName" value="{EditedTask>FieldName}"></core:CustomData>-->
+				<!--							</customData>-->
+				<!--							<customData>-->
+				<!--								<core:CustomData key="AssignmentId" value="{EditedTask>AssignmentId}"></core:CustomData>-->
+				<!--							</customData>-->
+				<!--						</Text>-->
+				<!--						<Switch state="{path:'EditedTask>FieldValue', formatter:'.formatter.switchState'}" type="AcceptReject" enabled="false" visible="{= ${EditedTask>Switch} ? true : false}"/>-->
+				<!--					</f:fields>-->
+				<!--				</f:FormElement>-->
+				<!--			</f:formElements>-->
+				<!--		</f:FormContainer>-->
+				<!--	</f:formContainers>-->
+				<!--</f:Form>		-->
+				<f:Form id="copyForm" visible="{controls>/copyAssignment}">
+					<f:layout>
+						<f:ResponsiveGridLayout labelSpanL="3" labelSpanM="3" emptySpanL="4" emptySpanM="4" columnsL="1" columnsM="1"/>
+					</f:layout>
+					<f:formContainers>
+						<f:FormContainer id="COPYFORM_FIELDS" formElements="{EditedTask>/}">
+							<f:formElements>
+								<!--<core:CustomData key="FieldName" value="{ProfileFields>FieldName}"></core:CustomData>-->
+								<f:FormElement label="{EditedTask>FieldLabel}">
+									<f:fields>
+										<Input showValueHelp="true" value="{EditedTask>FieldValue}" valueHelpOnly="false" valueHelpRequest="onValueHelp"
+											visible="{= ${EditedTask>Switch} ? false : true}">
+											<customData>
+												<core:CustomData key="FieldName" value="{EditedTask>FieldName}"></core:CustomData>
+											</customData>
+											<customData>
+												<core:CustomData key="AssignmentId" value="{EditedTask>AssignmentId}"></core:CustomData>
+											</customData>
+											<customData>
+												<core:CustomData key="FieldLabel" value="{EditedTask>FieldLabel}"></core:CustomData>
+											</customData>
+										</Input>
+										<Switch state="{path:'EditedTask>FieldValue', formatter:'.formatter.switchState'}" type="AcceptReject" enabled="true"
+											visible="{= ${EditedTask>Switch} ? true : false}"/>
+									</f:fields>
+								</f:FormElement>
+							</f:formElements>
+						</f:FormContainer>
+					</f:formContainers>
+				</f:Form>
+			</VBox>
+			<!--</content>-->
+			<!--<semantic:messagesIndicator>-->
+			<!--	<semantic:MessagesIndicator  press="handleMessagePopover"/>-->
+			<!--<Button id="messageList" icon="sap-icon://message-popup" visible="false" tooltip="{i18n>messagePopup}" press="handleMessagePopover"/>-->
+			<!--</semantic:messagesIndicator>-->
+			<!--<semantic:customFooterContent>-->
+			<!--	<footer>-->
+			<!--	<OverflowToolbar>-->
+			<!--		<Button icon="sap-icon://message-popup" text="{/messagesLength}" type="Emphasized" press="handleMessagePopoverPress"/>-->
+			<!--		<ToolbarSpacer/>-->
+			<!--		<Button type="Emphasized" text="{i18n>save}" press="onSave"/>-->
+			<!--		<Button text="{i18n>cancel}" type="Transparent" press="onCancel"/>-->
+			<!--	</OverflowToolbar>-->
+			<!--	</footer>-->
+			<!--</semantic:customFooterContent>-->
+			<!--</Page>-->
+		</sf:content>
+		<!-- DynamicPage Footer -->
+		<sf:footer>
+			<OverflowToolbar>
+				<Button id="messageList" icon="sap-icon://message-popup" text="{/messagesLength}" visible="{= !!${/messagesLength}}"
+					tooltip="{i18n>messagePopup}" press="handleMessagePopover"/>
+				<!--<Button icon="sap-icon://message-popup"-->
+				<!--		text="{/messagesLength}"-->
+				<!--		type="Emphasized"-->
+				<!--		press="onMessageButtonPress"-->
+				<!--		visible="{= !!${/messagesLength}}"/>-->
+				<ToolbarSpacer/>
+				<Button type="Emphasized" text="{i18n>save}" press="onSave" visible="{= ${controls>/displayAssignment} ? false : true}"/>
+				<Button text="{i18n>cancel}" type="Transparent" press="onCancel" visible="{= ${controls>/displayAssignmentCancel} ? false : true}"/>
+				<Button text="{i18n>cancel}" type="Transparent" press="onDisplayCancel" visible="{= ${controls>/displayAssignment} ? false : true}"/>
+			</OverflowToolbar>
+		</sf:footer>
+	</sf:DynamicPage>
+</mvc:View>

@@ -1,0 +1,267 @@
+<!--
+
+    Copyright (C) 2009-2020 SAP SE or an SAP affiliate company. All rights reserved.
+
+-->
+<core:FragmentDefinition xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:f="sap.ui.layout.form"
+	xmlns:l="sap.ui.layout">
+	<Panel backgroundDesign="Transparent" width="100%" class="sapUiNoMargin sapUiNoContentPadding">
+		<headerToolbar>
+			<OverflowToolbar>
+				<FormattedText
+					htmlText="{parts:[{path:'i18n>recordedTarget'},{path:'controls>/currentDate'},{path:'i18n>recordedTarget'}],formatter:'.formatter.getAdHocHeaderText'}"/>
+				<ToolbarSpacer/>
+				<core:ExtensionPoint name="formEntryExtension"/>
+				<Button text="{i18n>importWorklist}" type="Transparent" press="onImportWorklist"/>
+				<Button text="{i18n>saveAssignment}" type="Transparent" press="openAssignmentFragment"/>
+			</OverflowToolbar>
+		</headerToolbar>
+		<content>
+			<!--<FormattedText htmlText="{parts:[{path:'controls>/recorded'},{path:'controls>/target'}],formatter:'.formatter.getTotalRecordedText'}"-->
+			<!--	class="sapUiTinyMarginTop"/>-->
+			<!--<FormattedText htmlText="{parts:[{path:'controls>recorded'}],formatter:'.formatter.getSelectedDates'}" class="sapUiTinyMarginTop"/>-->
+			<!--<Button icon="sap-icon://message-information"/>-->
+			<!--<VBox>-->
+			<!--	<List class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"-->
+			<!--		header="{path:'adHocCreateCopy>date',formatter:'.formatter.dateStringFormat'}" items="{adHocCreateCopy>/}" subheader="Expenses"-->
+			<!--		press="onTileContentPress">-->
+			<!--		<CustomListItem>-->
+			<!--			<content>-->
+			<!--				<Text text="{adHocCreateCopy>date}" valueColor="Success" indicator="Up" withMargin="false"/>-->
+			<!--			</content>-->
+			<!--		</CustomListItem>-->
+			<!--		<customData>-->
+			<!--			<core:CustomData key="data" value="{adHocCreateCopy>data}"></core:CustomData>-->
+			<!--		</customData>-->
+			<!--	</List>-->
+			<!--</VBox>-->
+			<!--<VBox backgroundDesign="Transparent">-->
+			<!--	<List class="labelMarginLeft" visible="{= ${controls>/singleAdHocDay} === true ? false : true}" DataText="{i18n>noData}"-->
+			<!--		headerText="{i18n>selectedDates}" mode="Delete" delete="deleteAdHocDays" items="{path: 'adHocCopyDates>/'}">-->
+			<!--		<StandardListItem title="{path:'adHocCopyDates>', type: 'sap.ui.model.type.Date', formatOptions: { style: 'full' }}">-->
+			<!--			<customData>-->
+			<!--				<core:CustomData key="date" value="{path:'adHocCopyDates>'}"/>-->
+			<!--			</customData>-->
+			<!--		</StandardListItem>-->
+			<!--	</List>-->
+			<!--</VBox>-->
+			<!--<VBox backgroundDesign="Transparent">-->
+			<!--	<List class="labelMarginLeft" visible="{= ${controls>/singleAdHocDay} === true ? false : true}" DataText="{i18n>noData}"-->
+			<!--		headerText="{i18n>selectedDates}" mode="Delete" delete="deleteAdHocDays" items="{path:'adHocTotalTarget>/'}">-->
+			<!--		<CustomListItem>-->
+			<!--			<HBox width="100%" alignContent="Center">-->
+			<!--				<Label text="{path:'adHocTotalTarget>date', type: 'sap.ui.model.type.Date', formatOptions: { style: 'full' }}"/>-->
+			<!--				<Link class="sapUiLargeMarginBegin"-->
+			<!--					text="{parts:[{path:'adHocTotalTarget>recorded',type:'sap.ui.model.odata.type.Decimal', formatOptions: { parseAsString: 'true', decimals: '2', maxFractionDigits: '2', minFractionDigits: '0' }, constraints: { precision: '4', scale: '2', minimum: '0', maximum: '10000' }},{ path: 'adHocTotalTarget>target', type: 'sap.ui.model.odata.type.Decimal', formatOptions: { parseAsString: 'true', decimals: '2', maxFractionDigits: '2', minFractionDigits: '0' }, constraints: { precision: '4', scale: '2', minimum: '0', maximum: '10000' } }], formatter: 'formatter.concatStrings'}"-->
+			<!--					press="openQuickViewFragment">-->
+			<!--					<customData>-->
+			<!--						<core:CustomData key="date" value="{path:'adHocTotalTarget>date'}"/>-->
+			<!--					</customData>-->
+			<!--				</Link>-->
+			<!--			</HBox>-->
+			<!--			<customData>-->
+			<!--				<core:CustomData key="date" value="{path:'adHocTotalTarget>date'}"/>-->
+			<!--			</customData>-->
+			<!--		</CustomListItem>-->
+			<!--	</List>-->
+			<!--</VBox>-->
+			<VBox>
+				<Table id="adHocDetailsTable" class="labelMarginLeft" visible="{= ${controls>/singleAdHocDay} === true ? false : true}"
+					noDataText="{i18n>noData}" headerText="{i18n>selectedDates}" items="{path:'adHocTotalTarget>/'}">
+					<columns>
+						<Column demandPopin="true" hAlign="Begin" width="{= ${device>/system/phone} ? '40%' : '20%'}">
+							<Text text="{i18n>selectedDates}"/>
+						</Column>
+						<Column demandPopin="true" hAlign="Begin" width="{= ${device>/system/phone} ? '40%' : '20%'}">
+							<Text text="{i18n>recordedTarget}"/>
+						</Column>
+						<Column demandPopin="true" hAlign="{= ${device>/system/phone} ? 'Begin' : 'End'}">
+							<Text text=""/>
+						</Column>
+					</columns>
+					<items>
+						<ColumnListItem >
+							<cells>
+								<Label text="{path:'adHocTotalTarget>date', type: 'sap.ui.model.type.Date', formatOptions: { style: 'medium' }}"/>
+								<Link
+									text="{parts:[{path:'adHocTotalTarget>recorded',type:'sap.ui.model.odata.type.Decimal', formatOptions: { parseAsString: 'true', decimals: '2', maxFractionDigits: '2', minFractionDigits: '0' }, constraints: { precision: '4', scale: '2', minimum: '0', maximum: '10000' }},{ path: 'adHocTotalTarget>target', type: 'sap.ui.model.odata.type.Decimal', formatOptions: { parseAsString: 'true', decimals: '2', maxFractionDigits: '2', minFractionDigits: '0' }, constraints: { precision: '4', scale: '2', minimum: '0', maximum: '10000' } },{ path: 'adHocTotalTarget>updated', type: 'sap.ui.model.odata.type.Decimal', formatOptions: { parseAsString: 'true', decimals: '2', maxFractionDigits: '2', minFractionDigits: '0' }, constraints: { precision: '4', scale: '2', minimum: '0', maximum: '10000' } }], formatter: '.formatter.concatAdHocStrings'}"
+									press="openQuickViewFragment">
+									<customData>
+										<core:CustomData key="date" value="{path:'adHocTotalTarget>date'}"/>
+									</customData>
+								</Link>
+								<core:Icon src="sap-icon://sys-cancel" color="black" press="deleteAdHocDays" tooltip="{i18n>delete}">
+									<core:customData>
+										<core:CustomData key="date" value="{path:'adHocTotalTarget>date'}"/>
+									</core:customData>
+								</core:Icon>
+							</cells>
+							<customData>
+								<core:CustomData key="date" value="{path:'adHocTotalTarget>date'}"/>
+							</customData>
+						</ColumnListItem>
+					</items>
+				</Table>
+			</VBox>
+			<VBox backgroundDesign="Transparent" items="{AdHocModel>/fields/}" class="sapUiLargeMarginTop">
+				<items>
+					<Panel backgroundDesign="Transparent" visible="{=${AdHocModel>visible} === 'false'? false : true}">
+						<headerToolbar>
+							<Toolbar >
+								<Title level="H2" text="{AdHocModel>GroupName}"/>
+								<Button icon="sap-icon://message-information" press="getCustomData" visible="{= ${AdHocModel>GroupName} === '' ? false : true}">
+									<customData>
+										<core:CustomData key="GroupPosition" value="{AdHocModel>GroupPosition}"></core:CustomData>
+									</customData>
+								</Button>
+							</Toolbar>
+						</headerToolbar>
+						<f:Form id="AdHoc_Fields" editable="{controls>Editable}" formContainers="{path:'AdHocModel>containers/',templateShareable:false}">
+							<f:layout>
+								<!--<l:BlockBaseColumnLayout/>-->
+								<f:ResponsiveGridLayout columnsXL="2" columnsL="2" columnsM="1" singleContainerFullSize="false"/>
+							</f:layout>
+							<!--<f:formContainers>-->
+							<f:FormContainer formElements="{path:'AdHocModel>form/',templateShareable:false}">
+								<f:formElements>
+									<!--<core:CustomData key="FieldName" value="{ProfileFields>FieldName}"></core:CustomData>-->
+									<f:FormElement visible="{= ${AdHocModel>Switch} ? false : true}">
+										<f:label>
+											<Label wrapping="true" text="{AdHocModel>FieldLabel}" design="Bold" class="sapUiTinyMarginTop"
+												required="{parts:[{path:'AdHocModel>IsReadOnly'},{path:'AdHocModel>DefaultValue'},{path: 'AdHocModel>Required'}],formatter:'.formatter.getRequiredField'}"></Label>
+										</f:label>
+										<f:fields>
+											<VBox width="{= ${device>/system/phone} ? '100%' : '70%'}">
+												<items>
+													<Input value="{AdHocModel>FieldValue}" width="100%" valueState="{AdHocModel>valueState}" valueStateText="{AdHocModel>valueStateText}"
+														maxLength="{parts:[{path:'AdHocModel>FieldLength'},{path:'AdHocModel>FieldType'}],formatter:'.formatter.fieldLength'}"
+														type="{path:'AdHocModel>FieldType',formatter:'.formatter.typeKind'}" showValueHelp="{= ${AdHocModel>HasF4} === 'X' ? true : false}"
+														valueHelpOnly="{= ${AdHocModel>HasF4} === 'X' ? true : false}" valueHelpRequest="onValueHelp"
+														visible="{= ${AdHocModel>FieldType} === 'C' || ${AdHocModel>FieldType} === 'N' || ${AdHocModel>FieldType} === 'P' ? true : false}"
+														enabled="{=${AdHocModel>IsReadOnly} === 'TRUE'? false:true}" placeholder="{AdHocModel>InlineHelp}" submit="enableSubmit">
+														<layoutData>
+															<l:GridData span="XL10 L12 M12 S12"/>
+														</layoutData>
+														<customData>
+															<core:CustomData key="FieldName" value="{AdHocModel>FieldName}"></core:CustomData>
+														</customData>
+														<customData>
+															<core:CustomData key="AssignmentId" value="{AdHocModel>AssignmentId}"></core:CustomData>
+														</customData>
+														<customData>
+															<core:CustomData key="FieldLabel" value="{AdHocModel>FieldLabel}"></core:CustomData>
+														</customData>
+													</Input>
+													<FormattedText class=" sapUiTinyMarginBegin" width="100%"
+														htmlText="{parts:[{path:'AdHocModel>FieldName'},{path:'AdHocModel>FieldValue'},{path:'AdHocModel>FieldValueText'}],formatter:'.formatter.getFormattedTexts'}"
+														visible="{= ${AdHocModel>FieldType} === 'C' || ${AdHocModel>FieldType} === 'N' || ${AdHocModel>FieldType} === 'P' ? true : false}">
+														<layoutData>
+															<l:GridData span="XL9 L6 M12 S12"/>
+														</layoutData>
+													</FormattedText>
+													<DatePicker width="100%" value="{parts:[{path:'AdHocModel>FieldValue'},{path:'AdHocModel>FieldType'}],formatter:'.formatter.isDate'}"
+														change="enableSubmit" visible="{= ${AdHocModel>FieldType} === 'D' ? true : false}" placeholder="{AdHocModel>InlineHelp}">
+														<layoutData>
+															<l:GridData span="XL10 L6 M12 S12"/>
+														</layoutData>
+													</DatePicker>
+													<StepInput width="100%" validationMode="LiveChange" description="{AdHocModel>description}" change="liveChangeAdHoc"
+														value="{path:'AdHocModel>FieldValue'}" displayValuePrecision="2" min="0" step="1.00"
+														visible="{= ${AdHocModel>FieldType} === 'Z' ? true : false}">
+														<layoutData>
+															<l:GridData span="XL10 L6 M12 S12"/>
+														</layoutData>
+														<customData>
+															<core:CustomData key="GroupPosition" value="{AdHocModel>}"></core:CustomData>
+														</customData>
+													</StepInput>
+													<TimePicker value="{AdHocModel>FieldValue}" placeholder="{AdHocModel>FieldLabel}"
+														visible="{= ${AdHocModel>FieldType} === 'B' ? true : false}" change="enableSubmit"
+														displayFormat="{parts:[{path:'AdHocModel>FieldName'}],formatter:'.formatter.getValueFormatTimePicker'}" width="100%" valueFormat="HH:mm">
+														<layoutData>
+															<l:GridData span="XL10 L6 M12 S12"/>
+														</layoutData>
+													</TimePicker>
+													<!--<TimePicker value="{AdHocModel>FieldValue}" visible="{= ${AdHocModel>FieldType} === 'B' ? true : false}">-->
+													<!--	<layoutData>-->
+													<!--		<l:GridData span="XL10 L6 M12 S12"/>-->
+													<!--	</layoutData>-->
+													<!--</TimePicker>-->
+													<CheckBox visible="{= ${AdHocModel>FieldType} === 'V' ? true : false}" selected="{controls>/adHocDraftSelected}" select="setCheckbox">
+														<layoutData>
+															<l:GridData span="XL10 L6 M12 S12"/>
+														</layoutData>
+														<customData>
+															<core:CustomData key="GroupPosition" value="{AdHocModel>}"></core:CustomData>
+														</customData>
+													</CheckBox>
+													<CheckBox visible="{= ${AdHocModel>FieldType} === 'H' ? true : false}" selected="{controls>/adHocPreviousDaySelected}" select="setCheckbox">
+														<layoutData>
+															<l:GridData span="XL10 L6 M12 S12"/>
+														</layoutData>
+														<customData>
+															<core:CustomData key="GroupPosition" value="{AdHocModel>}"></core:CustomData>
+														</customData>
+													</CheckBox>
+													<Button visible="{= ${AdHocModel>FieldType} === 'Q' ? true : false}" press="openLongTextAdHocFragment"
+														icon="{path:'AdHocModel>FieldValue',formatter:'.formatter.longtextAdHocButtons'}" type="Transparent">
+														<layoutData>
+															<l:GridData span="XL10 L6 M12 S12"/>
+														</layoutData>
+														<customData>
+															<core:CustomData key="GroupPosition" value="{AdHocModel>}"></core:CustomData>
+														</customData>
+													</Button>
+												</items>
+											</VBox>
+										</f:fields>
+									</f:FormElement>
+								</f:formElements>
+							</f:FormContainer>
+							<!--</f:formContainers>-->
+						</f:Form>
+					</Panel>
+				</items>
+			</VBox>
+			<!--<VBox>-->
+			<!--	<f:Form editable="true">-->
+			<!--		<f:title>-->
+			<!--			<core:Title text="{i18n>assignmentDetails}"/>-->
+			<!--		</f:title>-->
+			<!--		<f:layout>-->
+			<!--			<f:ResponsiveGridLayout columnsXL="2" columnsL="2" columnsM="{path:'AdHocModel>single',formatter:'.formatter.single'}"-->
+			<!--				singleContainerFullSize="false"/>-->
+			<!--		</f:layout>-->
+			<!--		<f:formContainers>-->
+			<!--			<f:FormContainer id="EDITFORM_HEADER" title="">-->
+			<!--				<f:formElements>-->
+			<!--					<f:FormElement>-->
+			<!--						<Label text="Assignment Details"></Label>-->
+			<!--						<f:fields>-->
+			<!--							<VBox>-->
+			<!--								<items>-->
+			<!--									<ComboBox items="{ path: 'TasksWithGroups>/'}" loadItems="handleLoadItems" selectionChange="onSelectionChangeManual">-->
+			<!--										<core:ListItem key="{TasksWithGroups>AssignmentId}" text="{TasksWithGroups>AssignmentName}"/>-->
+			<!--									</ComboBox>-->
+			<!--									<Switch state="false" customTextOn="Yes" customTextOff="No" change="onAssignmentSwitchEnable">-->
+			<!--										<layoutData>-->
+			<!--											<FlexItemData growFactor="1"/>-->
+			<!--										</layoutData>-->
+			<!--									</Switch>-->
+			<!--									<Input required="true" value="{manual>/name}" valueState="{manual>/assignmentNameError}" maxLength="30"-->
+			<!--										valueStateText="{manual>/assignmentNameErrorText}"/>-->
+			<!--									<DateRangeSelection required="true" dateValue="{manual>/validFrom}" valueState="{manual>/assignmentValidityError}"-->
+			<!--										valueStateText="{manual>/assignmentValidityErrorText}" secondDateValue="{manual>/validTo}" change="handleDateRangeChange"/>-->
+			<!--									<Switch state="{manual>/status}" type="AcceptReject"/>-->
+			<!--								</items>-->
+			<!--							</VBox>-->
+			<!--						</f:fields>-->
+			<!--					</f:FormElement>-->
+			<!--				</f:formElements>-->
+			<!--			</f:FormContainer>-->
+			<!--		</f:formContainers>-->
+			<!--	</f:Form>-->
+			<!--</VBox>-->
+		</content>
+	</Panel>
+</core:FragmentDefinition>

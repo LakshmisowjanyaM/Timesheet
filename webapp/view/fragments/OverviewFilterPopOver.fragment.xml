@@ -1,0 +1,20 @@
+<!--
+
+    Copyright (C) 2009-2020 SAP SE or an SAP affiliate company. All rights reserved.
+
+-->
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<ViewSettingsDialog confirm="handleFilterConfirm" cancel="handleFilterCancel" reset="resetFilter">
+		<filterItems>
+			<ViewSettingsCustomItem text="{i18n>status}">
+				<customControl>
+					<ComboBox id="combo" items="{ path: 'Status>/', sorter: { path: 'text' } }" width="100%"
+						visible="{parts:[{path:'controls>/duplicateWeekVisibility'},{path:'device>/system/phone'},{path:'controls>/isDailyView'}],formatter:'.formatter.getFilterVisibilty'}"
+						selectedKey="100">
+						<core:Item key="{Status>key}" text="{path:'Status>key', formatter: '.formatter.status'}"/>
+					</ComboBox>
+				</customControl>
+			</ViewSettingsCustomItem>
+		</filterItems>
+	</ViewSettingsDialog>
+</core:FragmentDefinition>

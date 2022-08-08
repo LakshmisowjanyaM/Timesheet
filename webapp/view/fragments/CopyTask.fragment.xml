@@ -1,0 +1,40 @@
+<!--
+
+    Copyright (C) 2009-2020 SAP SE or an SAP affiliate company. All rights reserved.
+
+-->
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form"
+	class="sapUiSizeCompact">
+	<P13nDialog title="{i18n>copyTask}" showHeader="true" type="Standard" cancel="handleCancel" ok="handleConfirm">
+		<f:Form id="createForm">
+			<f:layout>
+				<f:ResponsiveGridLayout labelSpanL="3" labelSpanM="3" emptySpanL="4" emptySpanM="4" columnsL="1" columnsM="1"/>
+			</f:layout>
+			<f:formContainers>
+				<f:FormContainer id="FORM_FIELDS" formElements="{ProfileFields>/}">
+					<f:formElements>
+						<!--<core:CustomData key="FieldName" value="{ProfileFields>FieldName}"></core:CustomData>-->
+ 						<f:FormElement label="{ProfileFields>FieldLabel}">
+							<f:fields>
+								<Input showValueHelp="true" valueHelpOnly="false" valueHelpRequest="onValueHelp" visible="{= ${ProfileFields>Switch} ? false : true}">
+								<customData><core:CustomData key="FieldName" value="{ProfileFields>FieldName}"></core:CustomData></customData>	
+								</Input>	
+								<!--<Switch state="true" customTextOn="Yes" customTextOff="No" enabled="true" visible="{= ${ProfileFields>Switch} ? true : false}"/>-->
+								<!--<core:CustomData key="FieldName" value="{ProfileFields>FieldName}"/>-->
+							</f:fields>
+						</f:FormElement>                 
+					</f:formElements>
+				</f:FormContainer>
+				<f:FormContainer>
+					<f:formElements>
+						<f:FormElement label="{i18n>note}">
+							<f:fields>
+								<TextArea id="comments" maxLength="300" rows="3" visible="{configurationModel>CreateNoticeVisible}"/>
+							</f:fields>
+						</f:FormElement>
+					</f:formElements>
+				</f:FormContainer>
+			</f:formContainers>
+		</f:Form>
+	</P13nDialog>
+</core:FragmentDefinition>
